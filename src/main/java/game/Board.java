@@ -8,8 +8,10 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class Grid {
+public class Board {
     private List<List<Tile>> matrix;
     private int rowSize;
     private int columnSize;
+    private Pusher pusher;
+    private List<Coordinate> finishPositions;
 }

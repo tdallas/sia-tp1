@@ -4,7 +4,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class RockTile extends Tile {
-    public boolean canWalkThrough() {
+    public boolean isWalkable() {
+        return false;
+    }
+
+    @Override
+    public boolean isFinalTile() {
         return false;
     }
 }

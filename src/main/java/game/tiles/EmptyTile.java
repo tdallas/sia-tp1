@@ -6,18 +6,15 @@ import lombok.AllArgsConstructor;
 import java.util.Optional;
 
 @AllArgsConstructor
-public class EmptyTile extends Tile implements Walkable{
+public class EmptyTile extends Tile {
 
-    private Optional<Box> boxOptional = Optional.empty();
+    public boolean isWalkable() {
+        return !getBoxOptional().isPresent();
+    }
 
-    /**
-     * box must not be null
-     * @param box
-     */
-    public void setBox(final Box box) {
-        this.boxOptional = Optional.ofNullable(box);
+    @Override
+    public boolean isFinalTile() {
+        return false;
     }
-    public boolean canWalkThrough() {
-        return !boxOptional.isPresent();
-    }
+
 }
