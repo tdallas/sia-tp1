@@ -1,8 +1,8 @@
 package game.tiles;
 
 import game.Box;
-import lombok.Getter;
 import game.Coordinate;
+import lombok.Getter;
 
 import java.util.Optional;
 

@@ -1,7 +1,7 @@
 package strategies;
 
-import lombok.Getter;
 import game.tiles.Tile;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;

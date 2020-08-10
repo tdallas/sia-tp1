@@ -1,9 +1,6 @@
 package game;
 
-import game.tiles.Tile;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import strategies.Direction;
 
 import java.util.LinkedList;
 import java.util.List;

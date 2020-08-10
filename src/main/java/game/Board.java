@@ -14,4 +14,5 @@ public class Board {
     private int columnSize;
     private Pusher pusher;
     private List<Coordinate> finishPositions;
+    private List<Box> boxList;
 }

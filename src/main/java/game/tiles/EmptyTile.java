@@ -1,9 +1,6 @@
 package game.tiles;
 
-import game.Box;
 import lombok.AllArgsConstructor;
-
-import java.util.Optional;
 
 @AllArgsConstructor
 public class EmptyTile extends Tile {
