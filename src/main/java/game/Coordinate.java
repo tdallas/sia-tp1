@@ -2,6 +2,7 @@ package game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
@@ -27,5 +28,10 @@ public class Coordinate {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+    }
+
+    public static Coordinate add(final Coordinate fromCoordinate, final Coordinate coordinateToAdd) {
+        return new Coordinate(fromCoordinate.getX() + coordinateToAdd.getX(),
+                fromCoordinate.getY() + coordinateToAdd.getY());
     }
 }

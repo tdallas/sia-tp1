@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 public class FinishTile extends Tile {
 
     public boolean isWalkable() {
-        return !getBoxOptional().isPresent();
+        return true;
     }
 
     @Override
