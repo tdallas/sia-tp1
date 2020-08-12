@@ -2,12 +2,14 @@ package game.tiles;
 
 import game.Box;
 import game.Coordinate;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Objects;
 import java.util.Optional;
 
 @Getter
+@AllArgsConstructor
 public abstract class Tile {
     // The coordinate in which this tile is
     // Note that this could be a dynamic field if this is a PusherTile instance

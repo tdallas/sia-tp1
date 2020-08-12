@@ -1,13 +1,13 @@
 package strategies.nonInformed;
 
-import game.Board;
-import game.Path;
-import lombok.AllArgsConstructor;
+import game.Step;
 import strategies.SearchStrategy;
+
+import java.util.List;
 
 public class DFS extends SearchStrategy {
     @Override
-    public Path findSolution() {
+    public List<Step> findSolution() {
         return null;
     }
 }

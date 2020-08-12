@@ -1,9 +1,13 @@
 package game.tiles;
 
+import game.Coordinate;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public class FinishTile extends Tile {
+
+    public FinishTile(final Coordinate coordinate) {
+        super(coordinate);
+    }
 
     public boolean isWalkable() {
         return true;

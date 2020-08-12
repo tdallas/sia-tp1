@@ -1,7 +1,8 @@
 package strategies;
 
-import game.Board;
-import game.Path;
+import game.Step;
+
+import java.util.List;
 
 /**
  * I think this could be an interface also, it gets a little confusing for me if SearchStrategy is
@@ -10,6 +11,7 @@ import game.Path;
 public abstract class SearchStrategy {
     /**
      * This function find a solution for a Sokoban initial board
+     * @return
      */
-    public abstract Path findSolution();
+    public abstract List<Step> findSolution();
 }

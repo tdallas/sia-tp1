@@ -13,8 +13,8 @@ import java.util.Objects;
 @Getter
 public class Coordinate {
 
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     @Override
     public boolean equals(Object o) {
@@ -33,5 +33,10 @@ public class Coordinate {
     public static Coordinate add(final Coordinate fromCoordinate, final Coordinate coordinateToAdd) {
         return new Coordinate(fromCoordinate.getX() + coordinateToAdd.getX(),
                 fromCoordinate.getY() + coordinateToAdd.getY());
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getX() + "," + getY() + "]";
     }
 }
