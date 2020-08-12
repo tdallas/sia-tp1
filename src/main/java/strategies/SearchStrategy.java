@@ -11,5 +11,5 @@ public abstract class SearchStrategy {
     /**
      * This function find a solution for a Sokoban initial board
      */
-    public abstract Path findSolution(final Board initial);
+    public abstract Path findSolution();
 }
