@@ -35,7 +35,7 @@ public class Board {
         put(LEFT, new Coordinate(0, -1));
     }};
 
-    private Tile getTileIfExists(final Coordinate coordinate) {
+    protected Tile getTileIfExists(final Coordinate coordinate) {
         if (coordinate.getX() >= matrix.size()) {
             return null;
         }
@@ -49,7 +49,13 @@ public class Board {
         return null;
     }
 
-    private Coordinate getCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction) {
+    /**
+     * Returns coordinate to move if it exists and if walkable, otherwise null
+     * @param fromCoordinate
+     * @param direction
+     * @return
+     */
+    protected Coordinate getCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction) {
         final Coordinate coordinateToMove = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
         final Tile tileToMove = getTileIfExists(coordinateToMove);
         if (tileToMove != null && tileToMove.isWalkable()) {
@@ -117,7 +123,7 @@ public class Board {
         }
     }
 
-    private boolean isFinalTileAndContainsBox(Coordinate coordinateToMove) {
+    protected boolean isFinalTileAndContainsBox(Coordinate coordinateToMove) {
         Tile tile = getTileIfExists(coordinateToMove);
         return tile != null && tile.isFinalTile() && getBoxInCoordinate(coordinateToMove) != null;
     }
