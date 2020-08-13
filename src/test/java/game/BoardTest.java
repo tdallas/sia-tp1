@@ -5,6 +5,7 @@ import org.junit.Test;
 import strategies.BoardFactory;
 import strategies.Direction;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -72,9 +73,6 @@ public class BoardTest {
         assertTrue(directionsToMove.contains(UP));
         assertTrue(directionsToMove.contains(LEFT));
         assertTrue(directionsToMove.contains(RIGHT));
-
-        //Reset board, will be nice to use @BeforeEach but we need to update mvn to use junit5
-        currentBoard = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
     }
 
     @Test
@@ -92,9 +90,6 @@ public class BoardTest {
         currentBoard.moveBoxIfPossible(new Coordinate(2,1), UP);
 
         assertEquals(new Coordinate(1,1), currentBoard.getBoxList().get(0).getCoordinate());
-
-        //Reset board, will be nice to use @BeforeEach but we need to update mvn to use junit5
-        currentBoard = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
     }
 
     @Test
@@ -102,18 +97,12 @@ public class BoardTest {
         currentBoard.moveBoxIfPossible(new Coordinate(3,2), UP);
 
         assertEquals(new Coordinate(2,1), currentBoard.getBoxList().get(0).getCoordinate());
-
-        //Reset board, will be nice to use @BeforeEach but we need to update mvn to use junit5
-        currentBoard = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
     }
 
     @Test
     public void shouldReturnTrueIfItIsFinalTileAndContainsBox() {
         currentBoard.getBoxList().get(0).setCoordinate(new Coordinate(1,1));
         assertTrue(currentBoard.isFinalTileAndContainsBox(new Coordinate(1,1)));
-
-        //Reset board, will be nice to use @BeforeEach but we need to update mvn to use junit5
-        currentBoard = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
     }
 
     @Test
@@ -131,6 +120,44 @@ public class BoardTest {
         currentBoard.getBoxList().get(0).setCoordinate(new Coordinate(1,1));
         currentBoard.getBoxList().get(1).setCoordinate(new Coordinate(1,4));
         assertTrue(currentBoard.gameHasEnded(currentBoard.getBoxList()));
+    }
+
+    @Test
+    public void shouldMoveOnlyPusherTest() {
+        HashMap<String, Coordinate> previousBoxesCoordinateMap = new HashMap<>();
+        previousBoxesCoordinateMap.put(currentBoard.getBoxList().get(0).getLabel(), currentBoard.getBoxList().get(0).getCoordinate());
+        previousBoxesCoordinateMap.put(currentBoard.getBoxList().get(1).getLabel(), currentBoard.getBoxList().get(1).getCoordinate());
+
+        currentBoard.moveTo(UP);
+        assertEquals(new Coordinate(3,1), currentBoard.getPusher().getCurrentCoordinate());
+        assertEquals(previousBoxesCoordinateMap.get(currentBoard.getBoxList().get(0).getLabel()), currentBoard.getBoxList().get(0).getCoordinate());
+        assertEquals(previousBoxesCoordinateMap.get(currentBoard.getBoxList().get(1).getLabel()), currentBoard.getBoxList().get(1).getCoordinate());
+    }
+
+    @Test
+    public void shouldMovePusherAndBoxTest() {
+        currentBoard.getPusher().setCurrentCoordinate(new Coordinate(3,1));
+        HashMap<String, Coordinate> previousBoxesCoordinateMap = new HashMap<>();
+        previousBoxesCoordinateMap.put(currentBoard.getBoxList().get(0).getLabel(), currentBoard.getBoxList().get(0).getCoordinate());
+        previousBoxesCoordinateMap.put(currentBoard.getBoxList().get(1).getLabel(), currentBoard.getBoxList().get(1).getCoordinate());
+
+        currentBoard.moveTo(UP);
+        assertEquals(new Coordinate(2,1), currentBoard.getPusher().getCurrentCoordinate());
+        assertEquals(new Coordinate(1,1), currentBoard.getBoxList().get(0).getCoordinate());
+        assertEquals(previousBoxesCoordinateMap.get(currentBoard.getBoxList().get(1).getLabel()), currentBoard.getBoxList().get(1).getCoordinate());
+    }
+
+    @Test
+    public void shouldNotMovePusherIfItCannotMove() {
+        Coordinate previousCoordinate = currentBoard.getPusher().getCurrentCoordinate();
+        HashMap<String, Coordinate> previousBoxesCoordinateMap = new HashMap<>();
+        previousBoxesCoordinateMap.put(currentBoard.getBoxList().get(0).getLabel(), currentBoard.getBoxList().get(0).getCoordinate());
+        previousBoxesCoordinateMap.put(currentBoard.getBoxList().get(1).getLabel(), currentBoard.getBoxList().get(1).getCoordinate());
+
+        currentBoard.moveTo(DOWN);
+        assertEquals(previousCoordinate, currentBoard.getPusher().getCurrentCoordinate());
+        assertEquals(previousBoxesCoordinateMap.get(currentBoard.getBoxList().get(0).getLabel()), currentBoard.getBoxList().get(0).getCoordinate());
+        assertEquals(previousBoxesCoordinateMap.get(currentBoard.getBoxList().get(1).getLabel()), currentBoard.getBoxList().get(1).getCoordinate());
     }
 
 
