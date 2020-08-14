@@ -55,10 +55,11 @@ public class Board {
      * @param direction
      * @return
      */
-    protected Coordinate getCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction) {
+    protected Coordinate getCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction, boolean isBoxMovement) {
         final Coordinate coordinateToMove = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
         final Tile tileToMove = getTileIfExists(coordinateToMove);
-        if (tileToMove != null && tileToMove.isWalkable()) {
+        if (tileToMove != null && tileToMove.isWalkable() && getBoxInCoordinate(coordinateToMove) == null) {
+            if (!isBoxMovement && tileToMove.isFinalTile()) return null;
             return coordinateToMove;
         }
         return null;
@@ -68,7 +69,7 @@ public class Board {
         return coordinateVectorMap
                 .keySet()
                 .parallelStream()
-                .filter(direction -> getCoordinateToMoveTo(pusher.getCurrentCoordinate(), direction) != null)
+                .filter(direction -> getCoordinateToMoveTo(pusher.getCurrentCoordinate(), direction, false) != null)
                 .collect(Collectors.toList());
     }
 
@@ -96,8 +97,8 @@ public class Board {
 
     public void moveBoxIfPossible(final Coordinate coordinate, final Direction direction) {
         if (coordinateContainsBox(coordinate)) {
-            final Coordinate coordinateToMoveBox = getCoordinateToMoveTo(coordinate, direction);
-            if (coordinateToMoveBox != null) {
+            final Coordinate coordinateToMoveBox = getCoordinateToMoveTo(coordinate, direction, true);
+            if (coordinateToMoveBox != null && getBoxInCoordinate(coordinateToMoveBox) == null) {
                 getBoxInCoordinate(coordinate).setCoordinate(coordinateToMoveBox);
             }
         }
@@ -111,7 +112,7 @@ public class Board {
      * @throws Exception
      */
     public void moveTo(final Direction direction) {
-        final Coordinate coordinateToMove = getCoordinateToMoveTo(pusher.getCurrentCoordinate(), direction);
+        final Coordinate coordinateToMove = getCoordinateToMoveTo(pusher.getCurrentCoordinate(), direction, false);
         if (coordinateToMove != null) {
             if (!isFinalTileAndContainsBox(coordinateToMove)) {
                 moveBoxIfPossible(coordinateToMove, direction);

@@ -42,19 +42,19 @@ public class BoardTest {
 
     @Test
     public void getValidCoordinateToMoveIfTileExistsAndIsWalkableTest() {
-        Coordinate to = currentBoard.getCoordinateToMoveTo(new Coordinate(4,1), UP);
+        Coordinate to = currentBoard.getCoordinateToMoveTo(new Coordinate(4,1), UP, false);
         assertNotNull(to);
         assertEquals(new Coordinate(3,1), to);
     }
 
     @Test
     public void getNullIfTileDoesNotExistTest() {
-        assertNull(currentBoard.getCoordinateToMoveTo(new Coordinate(10,10),Direction.DOWN));
+        assertNull(currentBoard.getCoordinateToMoveTo(new Coordinate(10,10),Direction.DOWN, false));
     }
 
     @Test
     public void getNullIfTileExistsButItIsNotWalkableTest() {
-        assertNull(currentBoard.getCoordinateToMoveTo(new Coordinate(4,1), Direction.DOWN));
+        assertNull(currentBoard.getCoordinateToMoveTo(new Coordinate(4,1), Direction.DOWN, false));
     }
 
     @Test
