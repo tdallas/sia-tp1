@@ -58,8 +58,10 @@ public class Board {
     protected Coordinate getCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction, boolean isBoxMovement) {
         final Coordinate coordinateToMove = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
         final Tile tileToMove = getTileIfExists(coordinateToMove);
-        if (tileToMove != null && tileToMove.isWalkable() && getBoxInCoordinate(coordinateToMove) == null) {
-            if (!isBoxMovement && tileToMove.isFinalTile()) return null;
+        if (tileToMove != null && tileToMove.isWalkable()) {
+            if (isBoxMovement && getBoxInCoordinate(coordinateToMove) != null) {
+                return null;
+            }
             return coordinateToMove;
         }
         return null;
