@@ -36,7 +36,7 @@ public class DFS extends SearchStrategy {
         Node firstNode = new Node(board.getPusher(), board.getBoxList());
         findSolutionUsingDFS(firstNode);
         if (board.gameHasEnded(board.getBoxList())) {
-            return board.getPusher().getPath();
+            return board.getPusher().getPath().getSteps();
         }
         return null;
     }

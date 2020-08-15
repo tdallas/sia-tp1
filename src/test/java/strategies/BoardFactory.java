@@ -120,7 +120,7 @@ public class BoardFactory {
                     break;
                 case '@':
                     row.add(new EmptyTile(new Coordinate(rowCount, colCount)));
-                    pusher = new Pusher(new ArrayList<>(), new Coordinate(rowCount, colCount++));
+                    pusher = new Pusher(new Path(), new Coordinate(rowCount, colCount++));
                     break;
                 case '\n':
                     newLine = true;

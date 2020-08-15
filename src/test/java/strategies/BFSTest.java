@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 public class BFSTest {
     @Test
     public void boardGenerationTest() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.EASY);
+        Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
         BFS bfs = new BFS(board);
         List<Step> finalPath = bfs.findSolution();
         assertNotNull(finalPath);

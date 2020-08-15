@@ -100,7 +100,7 @@ public class Board {
     public void moveBoxIfPossible(final Coordinate coordinate, final Direction direction) {
         if (coordinateContainsBox(coordinate)) {
             final Coordinate coordinateToMoveBox = getCoordinateToMoveTo(coordinate, direction, true);
-            if (coordinateToMoveBox != null && getBoxInCoordinate(coordinateToMoveBox) == null) {
+            if (coordinateToMoveBox != null) {
                 getBoxInCoordinate(coordinate).setCoordinate(coordinateToMoveBox);
             }
         }

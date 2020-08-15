@@ -16,6 +16,11 @@ public class Coordinate {
     private final int x;
     private final int y;
 
+    public Coordinate(Coordinate coordinate){
+        this.x = coordinate.x;
+        this.y = coordinate.y;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

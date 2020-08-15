@@ -9,11 +9,19 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class Path {
-    private List<Step> steps = new LinkedList<>();
+    private List<Step> steps;
 
-    public Path addStep(final Step step) {
-        LinkedList<Step> newStepList = new LinkedList<>(steps);
-        newStepList.add(step);
-        return new Path(newStepList);
+    public Path(){
+        this.steps = new LinkedList<>();
     }
+
+    public Path(Path path){
+        this.steps = new LinkedList<>();
+        this.steps.addAll(path.steps);
+    }
+
+    public void addStep(final Step step){
+        steps.add(step);
+    }
+
 }

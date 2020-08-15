@@ -1,16 +1,14 @@
 package strategies.nonInformed;
 
 import game.Board;
+import game.Path;
 import game.Pusher;
 import game.Step;
 import strategies.Direction;
 import strategies.SearchStrategy;
 import strategies.utils.Node;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class BFS extends SearchStrategy {
 
@@ -20,9 +18,10 @@ public class BFS extends SearchStrategy {
 
     private final Board board;
     private Queue<Node> queue = new ArrayDeque<>();
-    private List<String> visited = new ArrayList<>();
+    private Set<Node> visited = new HashSet<>();
 
     private void setDataToBoard(final Node node) {
+
         board.setBoxList(new ArrayList<>(node.getBoxList()));
         board.setPusher(new Pusher(node.getPusher()));
     }
@@ -40,9 +39,9 @@ public class BFS extends SearchStrategy {
         setDataToBoard(currentNode);
     }
 
-    private void printPath(final List<Step> steps) {
-        System.out.println("Steps size "+ steps.size());
-        //steps.forEach(step -> System.out.println("(" + step.getFrom().toString() + " - " + step.getTo().toString() + ")"));
+    private void printPath(final Path path) {
+        System.out.println("Steps size "+ path.getSteps().size());
+        //path.getSteps().forEach(step -> System.out.println("(" + step.getFrom().toString() + " - " + step.getTo().toString() + ")"));
     }
 
     @Override
@@ -52,17 +51,17 @@ public class BFS extends SearchStrategy {
         while (!queue.isEmpty()) {
             currentNode = queue.poll();
             System.out.println(currentNode);
-            if (!visited.contains(currentNode.toString())) {
+            if (!visited.contains(currentNode)) {
                 if (!board.gameHasEnded(currentNode.getBoxList())) {
                     simulateMovesAndAddToQueue(currentNode);
                 } else {
                     setDataToBoard(currentNode);
-                    return currentNode.getPusher().getPath();
+                    return currentNode.getPusher().getPath().getSteps();
                 }
             } else {
                 System.out.println("Ya visitado");
             }
-            visited.add(currentNode.toString());
+            visited.add(currentNode);
         }
         // DEADLOCK
         return null;

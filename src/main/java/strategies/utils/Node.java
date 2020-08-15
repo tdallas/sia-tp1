@@ -7,15 +7,18 @@ import game.Step;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Node {
     private final Pusher pusher;
     private List<Box> boxList;
 
-    public Node(final Pusher pusher, final List<Box> srcList) {
-        this.pusher = pusher;
-        this.pusher.setPath(cloneStepList(pusher.getPath()));
-        this.boxList = cloneBoxList(srcList);
+    public Node(final Pusher pusher, final List<Box> boxList) {
+        this.pusher = new Pusher(pusher);
+        this.boxList = new ArrayList<>();
+        for(Box box : boxList){
+            this.boxList.add(new Box(box));
+        }
     }
 
     public List<Box> getBoxList() {
@@ -26,31 +29,23 @@ public class Node {
         return pusher;
     }
 
-    public boolean equals(final Node node) {
-        boolean pusherEquals = this.getPusher().getCurrentCoordinate().equals(node.getPusher().getCurrentCoordinate());
-        boolean boxesEquals = boxList.size() == node.getBoxList().size();
-        for (int i = 0; i < boxList.size() && boxesEquals; i++) {
-            boxesEquals = boxList.get(i).getCoordinate().equals(node.getBoxList().get(i).getCoordinate());
-        }
-        return pusherEquals && boxesEquals;
-    }
-
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
         boxList.forEach(box -> stringBuffer.append(box.toString()));
         return pusher.getCurrentCoordinate().toString() + stringBuffer.toString();
     }
 
-    private static List<Box> cloneBoxList(List<Box> orig) {
-        List<Box> clone = new ArrayList<>(Collections.nCopies(orig.size(), new Box()));
-        Collections.copy(clone, orig);
-        return clone;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(pusher, node.pusher) &&
+                Objects.equals(boxList, node.boxList);
     }
 
-    private static List<Step> cloneStepList(List<Step> orig) {
-        List<Step> clone = new ArrayList<>(Collections.nCopies(orig.size(), new Step()));
-        Collections.copy(clone, orig);
-        return clone;
+    @Override
+    public int hashCode() {
+        return Objects.hash(pusher, boxList);
     }
-
 }
