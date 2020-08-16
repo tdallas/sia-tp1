@@ -28,7 +28,7 @@ public class State {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         State state = (State) o;
-        return pusher.equals(state.pusher) && boxes.equals(state.boxes);
+        return pusher.equals(state.pusher) && boxes.containsAll(state.boxes) && state.boxes.containsAll(boxes);
     }
 
     @Override

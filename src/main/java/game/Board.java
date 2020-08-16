@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import strategies.utils.Step;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static game.Direction.*;
@@ -28,9 +25,11 @@ public class Board {
         put(LEFT, new Coordinate(0, -1));
     }};
 
-    /**public void setState(final State state){
-        this.state = state;
-    }**/
+    /**
+     * public void setState(final State state){
+     * this.state = state;
+     * }
+     **/
 
     protected Tile getTileIfExists(final Coordinate coordinate) {
         if (coordinate.getX() >= matrix.size()) {
@@ -48,6 +47,7 @@ public class Board {
 
     /**
      * Returns coordinate to move if it exists and if walkable, otherwise null
+     *
      * @param fromCoordinate
      * @param direction
      * @return
@@ -57,16 +57,14 @@ public class Board {
         final Tile tileToMove = getTileIfExists(coordinateToMove);
         if (tileToMove != null && tileToMove.isWalkable()) {
             if (getBoxInCoordinate(coordinateToMove, state) != null) {
-                if(isBoxMovement) {
+                if (isBoxMovement) {
                     return null;
-                }
-                else {
+                } else {
                     final Coordinate nextCoordinate = Coordinate.add(coordinateToMove, coordinateVectorMap.get(direction));
                     final Tile nextTile = getTileIfExists(nextCoordinate);
-                    if(nextTile != null && nextTile.isWalkable() && getBoxInCoordinate(nextCoordinate, state) == null){
+                    if (nextTile != null && nextTile.isWalkable() && getBoxInCoordinate(nextCoordinate, state) == null) {
                         return coordinateToMove;
-                    }
-                    else{
+                    } else {
                         return null;
                     }
                 }
@@ -82,10 +80,10 @@ public class Board {
                 .parallelStream()
                 .filter(direction -> {
                     Coordinate newCoordinate = getCoordinateToMoveTo(state.getPusher().getCoordinate(), direction, false, state);
-                    if (newCoordinate == null || isFinalTileAndContainsBox(newCoordinate,state)) return false;
+                    if (newCoordinate == null || isFinalTileAndContainsBox(newCoordinate, state)) return false;
                     Box boxInCoordinate = getBoxInCoordinate(newCoordinate, state);
                     if (boxInCoordinate == null) return true;
-                    Coordinate coordinateToMoveBox = getCoordinateToMoveTo(newCoordinate, direction, true,  state);
+                    Coordinate coordinateToMoveBox = getCoordinateToMoveTo(newCoordinate, direction, true, state);
                     return coordinateToMoveBox != null;
                 })
                 .collect(Collectors.toList());
@@ -118,7 +116,7 @@ public class Board {
             final Coordinate coordinateToMoveBox = getCoordinateToMoveTo(coordinate, direction, true, state);
             if (coordinateToMoveBox != null) {
                 Box box = getBoxInCoordinate(coordinate, state);
-                if(box != null) {
+                if (box != null) {
                     State newState = new State(state);
                     newState.getBoxes().remove(box);
                     newState.getBoxes().add(new Box(box.getLabel(), coordinateToMoveBox));
@@ -172,6 +170,7 @@ public class Board {
     }
 
     // TODO
+
     /**
      * returns true if pusher is in deadlock, false otherwise
      *
