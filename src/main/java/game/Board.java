@@ -47,33 +47,13 @@ public class Board {
      */
     protected Coordinate getPusherCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction, final State state) {
         final Coordinate firstCoordinateNext = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
-        final Coordinate secondCoordinateNext = Coordinate.add(firstCoordinateNext, coordinateVectorMap.get(direction));
         final Tile firstTileNext = getTileIfExists(firstCoordinateNext);
-        final Tile secondTileNext = getTileIfExists(secondCoordinateNext);
-        if(firstTileNext != null){
-            if(firstTileNext.isWalkable()){
-                if(!coordinateContainsBox(firstCoordinateNext, state)){
-                    return firstCoordinateNext;
-                }
-                else if(secondTileNext != null && !coordinateContainsBox(secondCoordinateNext, state)){
-                    return firstCoordinateNext;
-                }
-            }
-        }
-        return null;
-    }
-
-    protected Coordinate getBoxCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction, final State state) {
-        if(!coordinateContainsBox(fromCoordinate, state)){
-            return null;
-        }
-        final Coordinate coordinateNext = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
-        final Tile tileNext = getTileIfExists(coordinateNext);
-        if(tileNext != null){
-            if(tileNext.isWalkable()){
-                if(!coordinateContainsBox(coordinateNext, state)){
-                    return coordinateNext;
-                }
+        if (firstTileNext != null && firstTileNext.isWalkable()) {
+            final Coordinate secondCoordinateNext = Coordinate.add(firstCoordinateNext, coordinateVectorMap.get(direction));
+            if (!coordinateContainsBox(firstCoordinateNext, state)) {
+                return firstCoordinateNext;
+            } else if (getTileIfExists(secondCoordinateNext) != null && !coordinateContainsBox(secondCoordinateNext, state)) {
+                return firstCoordinateNext;
             }
         }
         return null;
@@ -107,44 +87,6 @@ public class Board {
                 .collect(Collectors.toList());
         if (boxToReturn.size() == 0) return null;
         return boxToReturn.get(0);
-    }
-
-    public State moveBoxIfPossible(final Coordinate coordinate, final Direction direction, final State state) {
-        if (coordinateContainsBox(coordinate, state)) {
-            final Coordinate coordinateToMoveBox = getBoxCoordinateToMoveTo(coordinate, direction, state);
-            if (coordinateToMoveBox != null) {
-                Box box = getBoxInCoordinate(coordinate, state);
-                if (box != null) {
-                    State newState = new State(state);
-                    newState.getBoxes().remove(box);
-                    newState.getBoxes().add(new Box(box.getLabel(), coordinateToMoveBox));
-                    return newState;
-                }
-            }
-        }
-        return new State(state);
-    }
-
-    /**
-     * This function moves pusher to desired direction.
-     * If that direction also push a box, that move is also made
-     *
-     * @param direction
-     * @throws Exception
-     */
-    public State moveTo(final Direction direction, final State state) {
-        final Coordinate coordinateToMove = getPusherCoordinateToMoveTo(state.getPusher().getCoordinate(), direction, state);
-        if (coordinateToMove != null) {
-            if (!isFinalTileAndContainsBox(coordinateToMove, state)) {
-                State newState = moveBoxIfPossible(coordinateToMove, direction, state);
-                newState.getPusher().setCoordinate(coordinateToMove);
-                return newState;
-            } else {
-                System.out.println("ROMPEMOS");
-                // FIXME THROW AN ERROR or something like that
-            }
-        }
-        return null;
     }
 
     protected boolean isFinalTileAndContainsBox(Coordinate coordinateToMove, final State state) {
