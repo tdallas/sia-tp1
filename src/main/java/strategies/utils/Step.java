@@ -21,8 +21,7 @@ public class Step {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Step step = (Step) o;
-        return Objects.equals(from, step.from) &&
-                Objects.equals(to, step.to);
+        return from.equals(step.from) && to.equals(step.to);
     }
 
     @Override

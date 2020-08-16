@@ -60,7 +60,7 @@ public class Board {
                 if(isBoxMovement) {
                     return null;
                 }
-                else{
+                else {
                     final Coordinate nextCoordinate = Coordinate.add(coordinateToMove, coordinateVectorMap.get(direction));
                     final Tile nextTile = getTileIfExists(nextCoordinate);
                     if(nextTile != null && nextTile.isWalkable() && getBoxInCoordinate(nextCoordinate, state) == null){

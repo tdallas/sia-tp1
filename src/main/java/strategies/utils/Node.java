@@ -16,7 +16,7 @@ public class Node {
     private Step step;
     private int cost;
 
-    public Node(Node parent, State state){
+    public Node(Node parent, State state) {
         this.parent = parent;
         this.state = state;
         this.step = null;
@@ -29,9 +29,9 @@ public class Node {
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
         return cost == node.cost &&
-                Objects.equals(parent, node.parent) &&
-                Objects.equals(state, node.state) &&
-                Objects.equals(step, node.step);
+                step.equals(node.step) &&
+                state.equals(node.state) &&
+                parent.equals(node.parent);
     }
 
     @Override
