@@ -1,10 +1,11 @@
 package strategies.nonInformed;
 
-import game.*;
-import strategies.utils.Path;
+import game.Board;
+import game.Direction;
+import game.State;
 import strategies.SearchStrategy;
 import strategies.utils.Node;
-import strategies.utils.Step;
+import strategies.utils.Path;
 
 import java.util.*;
 
@@ -21,28 +22,11 @@ public class BFS extends SearchStrategy {
     private void simulateMovesAndAddToQueue(final Node currentNode) {
         final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove(currentNode.getState());
         for (Direction direction : directionsToMovePusher) {
-            Node newNode = generateNewNode(direction, currentNode);
+            Node newNode = Node.generateNewNode(direction, currentNode, board);
             if(!visited.contains(newNode.getState())) {
                 queue.add(newNode);
             }
         }
-    }
-
-    private Node generateNewNode(Direction direction, final Node currentNode) {
-        Coordinate vectorCoordinate = Board.coordinateVectorMap.get(direction);
-        Pusher newPusher = new Pusher(new Coordinate(
-                vectorCoordinate.getX() + currentNode.getState().getPusher().getCoordinate().getX(),
-                vectorCoordinate.getY() + currentNode.getState().getPusher().getCoordinate().getY()));
-        Box box = board.getBoxInCoordinate(newPusher.getCoordinate(), currentNode.getState());
-        // check whether is a box in that coordinate, if its, move it too and generate new node
-        if (box != null) {
-            Box newBox = new Box(box.getLabel(), new Coordinate(vectorCoordinate.getX() + box.getCoordinate().getX(),
-                    vectorCoordinate.getY() + box.getCoordinate().getY()));
-            State newState = new State(newPusher, currentNode.getState().getBoxes(), newBox);
-            return new Node(currentNode, newState, new Step(currentNode.getState().getPusher().getCoordinate(), newPusher.getCoordinate()));
-        }
-        State newState = new State(newPusher, Set.copyOf(currentNode.getState().getBoxes()));
-        return new Node(currentNode, newState, new Step(currentNode.getState().getPusher().getCoordinate(), newPusher.getCoordinate()));
     }
 
     @Override

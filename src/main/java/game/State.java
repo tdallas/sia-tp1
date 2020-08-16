@@ -16,11 +16,6 @@ public class State {
     private Pusher pusher;
     private Set<Box> boxes;
 
-    public State(State state){
-        this.pusher = new Pusher(state.pusher);
-        this.boxes.addAll(state.getBoxes());
-    }
-
     public State(Pusher pusher, Set<Box> boxes, Box newBox) {
         this.pusher = pusher;
         this.boxes = new HashSet<>();
