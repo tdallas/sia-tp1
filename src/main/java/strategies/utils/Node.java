@@ -16,10 +16,10 @@ public class Node {
     private Step step;
     private int cost;
 
-    public Node(Node parent, State state) {
+    public Node(Node parent, State state, Step step) {
         this.parent = parent;
         this.state = state;
-        this.step = null;
+        this.step = step;
         this.cost = 0;
     }
 

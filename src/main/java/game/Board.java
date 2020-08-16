@@ -18,7 +18,7 @@ public class Board {
     private State initialState;
     //private State state;
 
-    private static final Map<Direction, Coordinate> coordinateVectorMap = new HashMap<>() {{
+    public static final Map<Direction, Coordinate> coordinateVectorMap = new HashMap<>() {{
         put(UP, new Coordinate(-1, 0));
         put(DOWN, new Coordinate(1, 0));
         put(RIGHT, new Coordinate(0, 1));
@@ -102,7 +102,7 @@ public class Board {
      * @param coordinate
      * @return
      */
-    private Box getBoxInCoordinate(final Coordinate coordinate, final State state) {
+    public Box getBoxInCoordinate(final Coordinate coordinate, final State state) {
         List<Box> boxToReturn = state.getBoxes()
                 .parallelStream()
                 .filter(box -> box.getCoordinate().equals(coordinate))

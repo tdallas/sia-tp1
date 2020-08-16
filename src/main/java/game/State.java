@@ -3,6 +3,7 @@ package game;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import strategies.utils.Node;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,9 +18,19 @@ public class State {
 
     public State(State state){
         this.pusher = new Pusher(state.pusher);
+        this.boxes.addAll(state.getBoxes());
+    }
+
+    public State(Pusher pusher, Set<Box> boxes, Box newBox) {
+        this.pusher = pusher;
         this.boxes = new HashSet<>();
-        for(Box box : state.boxes){
-            this.boxes.add(new Box(box));
+        for (Box box : boxes) {
+            // with this we avoid references problems
+            if (box.getLabel().equals(newBox.getLabel())) {
+                this.boxes.add(new Box(newBox));
+            } else {
+                this.boxes.add(box);
+            }
         }
     }
 

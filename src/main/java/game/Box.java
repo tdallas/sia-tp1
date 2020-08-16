@@ -23,7 +23,7 @@ public class Box {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Box box = (Box) o;
-        return label.equals(box.label) && coordinate.equals(box.coordinate);
+        return coordinate.equals(box.coordinate);
     }
 
     @Override
