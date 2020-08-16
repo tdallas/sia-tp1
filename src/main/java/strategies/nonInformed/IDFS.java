@@ -1,14 +1,11 @@
 package strategies.nonInformed;
 
-import game.Path;
-import game.Step;
+import strategies.utils.Path;
 import strategies.SearchStrategy;
-
-import java.util.List;
 
 public class IDFS extends SearchStrategy {
     @Override
-    public List<Step> findSolution() {
+    public Path findSolution() {
         return null;
     }
 }

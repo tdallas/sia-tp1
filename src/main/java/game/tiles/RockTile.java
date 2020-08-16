@@ -1,7 +1,6 @@
 package game.tiles;
 
 import game.Coordinate;
-import lombok.AllArgsConstructor;
 
 public class RockTile extends Tile {
 

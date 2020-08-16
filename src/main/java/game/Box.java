@@ -13,8 +13,9 @@ public class Box {
     private String label;
     private Coordinate coordinate;
 
-    public Box() {
-
+    public Box(Box box){
+        this.label = box.label;
+        this.coordinate = box.coordinate;
     }
 
     @Override
@@ -22,15 +23,16 @@ public class Box {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Box box = (Box) o;
-        return Objects.equals(label, box.label);
+        return coordinate.equals(box.coordinate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(label);
+        return Objects.hash(label, coordinate);
     }
 
+    @Override
     public String toString() {
-        return label + coordinate.toString();
+        return label + "=" + coordinate;
     }
 }

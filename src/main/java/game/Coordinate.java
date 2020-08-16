@@ -2,13 +2,9 @@ package game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
-/**
- * (x,y)
- */
 @AllArgsConstructor
 @Getter
 public class Coordinate {
@@ -31,8 +27,7 @@ public class Coordinate {
     }
 
     public static Coordinate add(final Coordinate fromCoordinate, final Coordinate coordinateToAdd) {
-        return new Coordinate(fromCoordinate.getX() + coordinateToAdd.getX(),
-                fromCoordinate.getY() + coordinateToAdd.getY());
+        return new Coordinate(fromCoordinate.getX() + coordinateToAdd.getX(), fromCoordinate.getY() + coordinateToAdd.getY());
     }
 
     @Override

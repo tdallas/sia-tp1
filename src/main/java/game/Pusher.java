@@ -5,29 +5,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Pusher implements Cloneable {
-    private List<Step> path;
-    private Coordinate currentCoordinate;
+public class Pusher{
+    private Coordinate coordinate;
 
-    public Pusher(final Pusher pusher) {
-        this.path = pusher.getPath();
-        this.currentCoordinate = pusher.getCurrentCoordinate();
+    public Pusher(Pusher pusher) {
+        this.coordinate = pusher.coordinate;
     }
 
-    public void addStep(final Step step) {
-        // This is done because of backtracking consistency issues
-        List<Step> newPath = new ArrayList<>(path);
-        Collections.copy(newPath, path);
-        newPath.add(step);
-        this.path = newPath;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pusher pusher = (Pusher) o;
+        return Objects.equals(coordinate, pusher.coordinate);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(coordinate);
+    }
+
+    @Override
+    public String toString() {
+        return "Pusher=" + coordinate;
+    }
 }
