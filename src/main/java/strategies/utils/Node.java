@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 public class Node {
     private final Node parent;
-    private final State state;
+    private State state;
     private Step step;
     private int cost;
 

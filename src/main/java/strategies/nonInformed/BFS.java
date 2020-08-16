@@ -18,35 +18,29 @@ public class BFS extends SearchStrategy {
     private Queue<Node> queue = new ArrayDeque<>();
     private Set<State> visited = new HashSet<>();
 
-    private void setStateToBoard(final Node node) {
-        board.setState(node.getState());
-    }
-
     private void simulateMovesAndAddToQueue(final Node currentNode) {
-        final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove();
+        final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove(currentNode.getState());
         for (Direction direction : directionsToMovePusher) {
             Node newNode = new Node(currentNode, new State(currentNode.getState()));
             Coordinate previousCoordinate = currentNode.getState().getPusher().getCoordinate();
-            setStateToBoard(newNode);
-            Coordinate newCoordinate = board.moveTo(direction);
-            newNode.setStep(new Step(previousCoordinate, newCoordinate));
+            State newState = board.moveTo(direction, newNode.getState());
+            newNode.setState(newState);
+            newNode.setStep(new Step(previousCoordinate, newState.getPusher().getCoordinate()));
             if(!visited.contains(newNode.getState())) {
                 queue.add(newNode);
             }
         }
-        setStateToBoard(currentNode);
     }
 
     @Override
     public Path findSolution() {
-        Node currentNode = new Node(null, board.getState(), null, 0);
+        Node currentNode = new Node(null, board.getInitialState(), null, 0);
         queue.add(currentNode);
         while (!queue.isEmpty()) {
             currentNode = queue.poll();
             System.out.println(currentNode);
-            setStateToBoard(currentNode);
             if (!visited.contains(currentNode.getState())) {
-                if (!board.gameHasEnded()) {
+                if (!board.gameHasEnded(currentNode.getState())) {
                     simulateMovesAndAddToQueue(currentNode);
                 } else {
                     Path result = new Path(currentNode);

@@ -15,37 +15,36 @@ import java.util.Set;
 
 public class BoardFactory {
 
-    final static String hard =  "XXXXXXX\n" +
-                                "XXX@ XX\n" +
-                                "XXX**XX\n" +
-                                "X    .X\n" +
-                                "X   * X\n" +
-                                "XX. XXX\n" +
-                                "XX. XXX\n" +
-                                "XXXXXXX";
+    final static String hard = "XXXXXXX\n" +
+            "XXX@ XX\n" +
+            "XXX**XX\n" +
+            "X    .X\n" +
+            "X   * X\n" +
+            "XX. XXX\n" +
+            "XX. XXX\n" +
+            "XXXXXXX";
 
-    final static String medium =    "XXXXXXX\n" +
-                                    "X.  . X\n" +
-                                    "X**   X\n" +
-                                    "X     X\n" +
-                                    "X@XX  X\n" +
-                                    "XXXXXXX";
+    final static String medium = "XXXXXXX\n" +
+            "X.  . X\n" +
+            "X**   X\n" +
+            "X     X\n" +
+            "X@XX  X\n" +
+            "XXXXXXX";
 
-    final static String easy =  "XXX\n" +
-                                "X.X\n" +
-                                "X X\n" +
-                                "X*X\n" +
-                                "X@X\n" +
-                                "XXX";
+    final static String easy = "XXX\n" +
+            "X.X\n" +
+            "X X\n" +
+            "X*X\n" +
+            "X@X\n" +
+            "XXX";
 
-    final static String test =  "XXXXX\n" +
-                                "X *.X\n" +
-                                "X @XX\n" +
-                                "XXXXXX";
+    final static String test = "XXXXX\n" +
+            "X *.X\n" +
+            "X @XX\n" +
+            "XXXXXX";
 
     public static enum Level {EASY, MEDIUM, HARD, TEST}
 
-    @Getter
     @AllArgsConstructor
     private static class BoardGame {
         private final List<List<Tile>> matrix;
@@ -56,10 +55,9 @@ public class BoardFactory {
     public static Board createBoard(final Level level) {
         BoardGame boardGame = generateGame(level);
 
-        return new Board(
-                boardGame.getMatrix(),
-                boardGame.getFinishPositions(),
-                boardGame.getState()
+        return new Board(boardGame.matrix,
+                boardGame.finishPositions,
+                boardGame.state
         );
     }
 

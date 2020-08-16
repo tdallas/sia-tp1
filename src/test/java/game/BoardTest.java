@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static game.Direction.*;
-
+/*
 public class BoardTest {
 
     private Board currentBoard;
@@ -163,3 +163,4 @@ public class BoardTest {
     }
 
 }
+*/

@@ -5,14 +5,12 @@ import org.junit.Test;
 import strategies.nonInformed.BFS;
 import strategies.utils.Path;
 
-import static org.junit.Assert.assertNotNull;
-
 public class BFSTest {
     @Test
     public void boardGenerationTest() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
         BFS bfs = new BFS(board);
         Path finalPath = bfs.findSolution();
-        assertNotNull(finalPath);
+        System.out.printf("Final path %s \n", finalPath);
     }
 }
