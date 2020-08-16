@@ -1,6 +1,6 @@
 package strategies;
 
-import game.Path;
+import strategies.utils.Path;
 
 /**
  * I think this could be an interface also, it gets a little confusing for me if SearchStrategy is

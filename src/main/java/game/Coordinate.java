@@ -2,24 +2,15 @@ package game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
-/**
- * (x,y)
- */
 @AllArgsConstructor
 @Getter
 public class Coordinate {
 
     private final int x;
     private final int y;
-
-    public Coordinate(Coordinate coordinate){
-        this.x = coordinate.x;
-        this.y = coordinate.y;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -36,8 +27,7 @@ public class Coordinate {
     }
 
     public static Coordinate add(final Coordinate fromCoordinate, final Coordinate coordinateToAdd) {
-        return new Coordinate(fromCoordinate.getX() + coordinateToAdd.getX(),
-                fromCoordinate.getY() + coordinateToAdd.getY());
+        return new Coordinate(fromCoordinate.getX() + coordinateToAdd.getX(), fromCoordinate.getY() + coordinateToAdd.getY());
     }
 
     @Override

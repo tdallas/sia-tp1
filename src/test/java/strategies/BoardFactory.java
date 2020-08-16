@@ -7,42 +7,41 @@ import game.tiles.RockTile;
 import game.tiles.Tile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BoardFactory {
 
-    final static String hard = "    XXXXX\n" +
-            "    X   X\n" +
-            "    X*  X\n" +
-            "  XXX  *XXX\n" +
-            "  X  *  * X\n" +
-            "XXX X XXX X     XXXXXX\n" +
-            "X   X XXX XXXXXXX  ..X\n" +
-            "X *  *             ..X\n" +
-            "XXXXX XXXX X@XXXX  ..X\n" +
-            "    X      XXX  XXXXXX\n" +
-            "    XXXXXXXX";
+    final static String hard =  "XXXXXXX\n" +
+                                "XXX@ XX\n" +
+                                "XXX**XX\n" +
+                                "X    .X\n" +
+                                "X   * X\n" +
+                                "XX. XXX\n" +
+                                "XX. XXX\n" +
+                                "XXXXXXX";
 
-    final static String easy = "XXX\n" +
-            "X.X\n" +
-            "X X\n" +
-            "X*X\n" +
-            "X@X\n" +
-            "XXX";
-    final static String medium = "XXXXXXX\n" +
-            "X.  . X\n" +
-            "X**   X\n" +
-            "X     X\n" +
-            "X@XX  X\n" +
-            "XXXXXXX";
+    final static String medium =    "XXXXXXX\n" +
+                                    "X.  . X\n" +
+                                    "X**   X\n" +
+                                    "X     X\n" +
+                                    "X@XX  X\n" +
+                                    "XXXXXXX";
 
-    final static String test = "XXXXX\n" +
-                               "X *.X\n" +
-                               "X @XX\n" +
-                               "XXXXXX";
+    final static String easy =  "XXX\n" +
+                                "X.X\n" +
+                                "X X\n" +
+                                "X*X\n" +
+                                "X@X\n" +
+                                "XXX";
+
+    final static String test =  "XXXXX\n" +
+                                "X *.X\n" +
+                                "X @XX\n" +
+                                "XXXXXX";
 
     public static enum Level {EASY, MEDIUM, HARD, TEST}
 
@@ -50,9 +49,8 @@ public class BoardFactory {
     @AllArgsConstructor
     private static class BoardGame {
         private final List<List<Tile>> matrix;
-        private final Pusher pusher;
         private final List<Coordinate> finishPositions;
-        private final List<Box> boxList;
+        private final State state;
     }
 
     public static Board createBoard(final Level level) {
@@ -60,9 +58,8 @@ public class BoardFactory {
 
         return new Board(
                 boardGame.getMatrix(),
-                boardGame.getPusher(),
                 boardGame.getFinishPositions(),
-                boardGame.getBoxList()
+                boardGame.getState()
         );
     }
 
@@ -98,9 +95,10 @@ public class BoardFactory {
 
     private static BoardGame generateLevel(final String level) {
         List<List<Tile>> map = new ArrayList<>();
-        List<Box> boxList = new ArrayList<>();
+        Set<Box> boxes = new HashSet<>();
         List<Coordinate> finishPositions = new ArrayList<>();
         Pusher pusher = new Pusher();
+        State state = new State(pusher, boxes);
         boolean newLine = true;
         List<Tile> row = new ArrayList<>();
         int colCount = 0;
@@ -127,11 +125,11 @@ public class BoardFactory {
                     break;
                 case '*':
                     row.add(new EmptyTile(new Coordinate(rowCount, colCount)));
-                    boxList.add(new Box("Box" + boxCount++, new Coordinate(rowCount, colCount++)));
+                    boxes.add(new Box("Box" + boxCount++, new Coordinate(rowCount, colCount++)));
                     break;
                 case '@':
                     row.add(new EmptyTile(new Coordinate(rowCount, colCount)));
-                    pusher = new Pusher(new Path(), new Coordinate(rowCount, colCount++));
+                    pusher = new Pusher(new Coordinate(rowCount, colCount++));
                     break;
                 case '\n':
                     newLine = true;
@@ -142,6 +140,6 @@ public class BoardFactory {
             }
 
         }
-        return new BoardGame(map, pusher, finishPositions, boxList);
+        return new BoardGame(map, finishPositions, state);
     }
 }

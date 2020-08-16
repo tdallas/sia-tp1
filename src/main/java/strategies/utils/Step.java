@@ -1,5 +1,6 @@
-package game;
+package strategies.utils;
 
+import game.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

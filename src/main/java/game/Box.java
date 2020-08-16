@@ -15,7 +15,7 @@ public class Box {
 
     public Box(Box box){
         this.label = box.label;
-        this.coordinate = new Coordinate(box.coordinate);
+        this.coordinate = box.coordinate;
     }
 
     @Override
@@ -32,7 +32,8 @@ public class Box {
         return Objects.hash(label, coordinate);
     }
 
+    @Override
     public String toString() {
-        return label + "=" + coordinate.toString();
+        return label + "=" + coordinate;
     }
 }

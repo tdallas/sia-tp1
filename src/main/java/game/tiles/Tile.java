@@ -1,12 +1,10 @@
 package game.tiles;
 
-import game.Box;
 import game.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Getter
 @AllArgsConstructor

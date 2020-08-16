@@ -1,6 +1,6 @@
 package strategies.nonInformed;
 
-import game.Path;
+import strategies.utils.Path;
 import strategies.SearchStrategy;
 
 public class IDFS extends SearchStrategy {
