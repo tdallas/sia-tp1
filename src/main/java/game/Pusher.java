@@ -34,12 +34,11 @@ public class Pusher implements Cloneable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pusher pusher = (Pusher) o;
-        return Objects.equals(path, pusher.path) &&
-                Objects.equals(currentCoordinate, pusher.currentCoordinate);
+        return Objects.equals(currentCoordinate, pusher.currentCoordinate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(path, currentCoordinate);
+        return Objects.hash(currentCoordinate);
     }
 }

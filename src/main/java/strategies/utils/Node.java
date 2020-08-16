@@ -32,7 +32,7 @@ public class Node {
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
         boxList.forEach(box -> stringBuffer.append(box.toString()));
-        return pusher.getCurrentCoordinate().toString() + stringBuffer.toString();
+        return "Pusher=" + pusher.getCurrentCoordinate().toString() + stringBuffer.toString();
     }
 
     @Override

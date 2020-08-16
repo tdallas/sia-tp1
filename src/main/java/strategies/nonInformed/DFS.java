@@ -1,8 +1,8 @@
 package strategies.nonInformed;
 
 import game.Board;
+import game.Path;
 import game.Pusher;
-import game.Step;
 import lombok.Getter;
 import strategies.Direction;
 import strategies.SearchStrategy;
@@ -32,11 +32,11 @@ public class DFS extends SearchStrategy {
     }
 
     @Override
-    public List<Step> findSolution() {
+    public Path findSolution() {
         Node firstNode = new Node(board.getPusher(), board.getBoxList());
         findSolutionUsingDFS(firstNode);
         if (board.gameHasEnded(board.getBoxList())) {
-            return board.getPusher().getPath().getSteps();
+            return board.getPusher().getPath();
         }
         return null;
     }
@@ -50,7 +50,7 @@ public class DFS extends SearchStrategy {
             }
             return;
         }
-        List<Direction> posibleDirections = board.getPusherPossibleDirectionsToMove();
+        List<Direction> posibleDirections = board.getPusherPossibleDirectionsToMove(currentNode);
         for (Direction direction : posibleDirections) {
             Node backupNode = new Node(currentNode.getPusher(), currentNode.getBoxList());
             setDataToBoard(backupNode);

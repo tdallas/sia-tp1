@@ -3,7 +3,6 @@ package strategies.nonInformed;
 import game.Board;
 import game.Path;
 import game.Pusher;
-import game.Step;
 import strategies.Direction;
 import strategies.SearchStrategy;
 import strategies.utils.Node;
@@ -27,14 +26,16 @@ public class BFS extends SearchStrategy {
     }
 
     private void simulateMovesAndAddToQueue(final Node currentNode) {
-        final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove();
+        final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove(currentNode);
         for (Direction direction : directionsToMovePusher) {
             Node backupNode = new Node(currentNode.getPusher(), currentNode.getBoxList());
             setDataToBoard(backupNode);
             board.moveTo(direction);
             printPath(board.getPusher().getPath());
             Node newNode = new Node(board.getPusher(), board.getBoxList());
-            queue.add(newNode);
+            if(!visited.contains(newNode)) {
+                queue.add(newNode);
+            }
         }
         setDataToBoard(currentNode);
     }
@@ -45,7 +46,7 @@ public class BFS extends SearchStrategy {
     }
 
     @Override
-    public List<Step> findSolution() {
+    public Path findSolution() {
         Node currentNode = new Node(board.getPusher(), board.getBoxList());
         queue.add(currentNode);
         while (!queue.isEmpty()) {
@@ -56,7 +57,7 @@ public class BFS extends SearchStrategy {
                     simulateMovesAndAddToQueue(currentNode);
                 } else {
                     setDataToBoard(currentNode);
-                    return currentNode.getPusher().getPath().getSteps();
+                    return currentNode.getPusher().getPath();
                 }
             } else {
                 System.out.println("Ya visitado");

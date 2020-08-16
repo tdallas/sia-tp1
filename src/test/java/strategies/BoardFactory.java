@@ -39,7 +39,12 @@ public class BoardFactory {
             "X@XX  X\n" +
             "XXXXXXX";
 
-    public static enum Level {EASY, MEDIUM, HARD}
+    final static String test = "XXXXX\n" +
+                               "X *.X\n" +
+                               "X @XX\n" +
+                               "XXXXXX";
+
+    public static enum Level {EASY, MEDIUM, HARD, TEST}
 
     @Getter
     @AllArgsConstructor
@@ -69,6 +74,8 @@ public class BoardFactory {
                 return generateMediumLevel();
             case HARD:
                 return generateHardLevel();
+            case TEST:
+                return generateTestLevel();
         }
         return null;
     }
@@ -83,6 +90,10 @@ public class BoardFactory {
 
     private static BoardGame generateEasyLevel() {
         return generateLevel(easy);
+    }
+
+    private static BoardGame generateTestLevel() {
+        return generateLevel(test);
     }
 
     private static BoardGame generateLevel(final String level) {

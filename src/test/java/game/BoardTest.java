@@ -160,5 +160,13 @@ public class BoardTest {
         assertEquals(previousBoxesCoordinateMap.get(currentBoard.getBoxList().get(1).getLabel()), currentBoard.getBoxList().get(1).getCoordinate());
     }
 
+    @Test
+    public void pusherShouldBeEqual() {
+        Board board1 = BoardFactory.createBoard(BoardFactory.Level.EASY);
+        Board board2 = BoardFactory.createBoard(BoardFactory.Level.EASY);
+
+        assertEquals(board1.getPusher(), board2.getPusher());
+        assertEquals(board1.getBoxList(), board1.getBoxList());
+    }
 
 }

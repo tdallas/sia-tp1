@@ -11,13 +11,6 @@ public class Step {
     private Coordinate from;
     private Coordinate to;
 
-    public Step() {}
-
-    public Step(Step step){
-        this.from = new Coordinate(from);
-        this.to = new Coordinate(to);
-    }
-
     public String toString() {
         return from.toString() + "->" + to.toString();
     }

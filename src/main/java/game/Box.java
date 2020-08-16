@@ -13,12 +13,8 @@ public class Box {
     private String label;
     private Coordinate coordinate;
 
-    public Box() {
-
-    }
-
     public Box(Box box){
-        this.label = label;
+        this.label = box.label;
         this.coordinate = new Coordinate(box.coordinate);
     }
 
@@ -37,6 +33,6 @@ public class Box {
     }
 
     public String toString() {
-        return label + coordinate.toString();
+        return label + "=" + coordinate.toString();
     }
 }

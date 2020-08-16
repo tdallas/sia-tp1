@@ -4,6 +4,7 @@ import game.tiles.Tile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import strategies.Direction;
+import strategies.utils.Node;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,12 +60,56 @@ public class Board {
         final Coordinate coordinateToMove = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
         final Tile tileToMove = getTileIfExists(coordinateToMove);
         if (tileToMove != null && tileToMove.isWalkable()) {
-            if (isBoxMovement && getBoxInCoordinate(coordinateToMove) != null) {
-                return null;
+            if (getBoxInCoordinate(coordinateToMove) != null) {
+                if(isBoxMovement) {
+                    return null;
+                }
+                else{
+                    final Coordinate nextCoordinate = Coordinate.add(coordinateToMove, coordinateVectorMap.get(direction));
+                    final Tile nextTile = getTileIfExists(nextCoordinate);
+                    if(nextTile != null && nextTile.isWalkable() && getBoxInCoordinate(nextCoordinate) == null){
+                        return coordinateToMove;
+                    }
+                    else{
+                        return null;
+                    }
+                }
             }
             return coordinateToMove;
         }
         return null;
+    }
+
+    protected Coordinate getCoordinateToMoveTo(final Node node, final Direction direction, boolean isBoxMovement) {
+        final Coordinate coordinateToMove = Coordinate.add(node.getPusher().getCurrentCoordinate(), coordinateVectorMap.get(direction));
+        final Tile tileToMove = getTileIfExists(coordinateToMove);
+        if (tileToMove != null && tileToMove.isWalkable()) {
+            if (getBoxInCoordinate(node.getBoxList(), coordinateToMove) != null) {
+                if(isBoxMovement) {
+                    return null;
+                }
+                else{
+                    final Coordinate nextCoordinate = Coordinate.add(coordinateToMove, coordinateVectorMap.get(direction));
+                    final Tile nextTile = getTileIfExists(nextCoordinate);
+                    if(nextTile != null && nextTile.isWalkable() && getBoxInCoordinate(node.getBoxList(), nextCoordinate) == null){
+                        return coordinateToMove;
+                    }
+                    else{
+                        return null;
+                    }
+                }
+            }
+            return coordinateToMove;
+        }
+        return null;
+    }
+
+    public List<Direction> getPusherPossibleDirectionsToMove(Node node) {
+        return coordinateVectorMap
+                .keySet()
+                .parallelStream()
+                .filter(direction -> getCoordinateToMoveTo(node, direction, false) != null)
+                .collect(Collectors.toList());
     }
 
     public List<Direction> getPusherPossibleDirectionsToMove() {
@@ -89,6 +134,15 @@ public class Board {
      * @return
      */
     private Box getBoxInCoordinate(final Coordinate coordinate) {
+        List<Box> boxToReturn = boxList
+                .parallelStream()
+                .filter(box -> box.getCoordinate().equals(coordinate))
+                .collect(Collectors.toList());
+        if (boxToReturn.size() == 0) return null;
+        return boxToReturn.get(0);
+    }
+
+    private Box getBoxInCoordinate(List<Box> boxList, final Coordinate coordinate) {
         List<Box> boxToReturn = boxList
                 .parallelStream()
                 .filter(box -> box.getCoordinate().equals(coordinate))
