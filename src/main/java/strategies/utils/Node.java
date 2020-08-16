@@ -3,19 +3,24 @@ package strategies.utils;
 import game.State;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
+@Setter
 public class Node {
     private final Node parent;
     private final State state;
-    private final Step step;
+    private Step step;
     private int cost;
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public Node(Node parent, State state){
+        this.parent = parent;
+        this.state = state;
+        this.step = null;
+        this.cost = 0;
     }
 
     @Override
@@ -32,5 +37,13 @@ public class Node {
     @Override
     public int hashCode() {
         return Objects.hash(parent, state, step, cost);
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "state=" + state +
+                ", step=" + step +
+                '}';
     }
 }

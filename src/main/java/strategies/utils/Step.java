@@ -9,8 +9,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 public class Step {
-    private Coordinate from;
-    private Coordinate to;
+    private final Coordinate from;
+    private final Coordinate to;
 
     public String toString() {
         return from.toString() + "->" + to.toString();

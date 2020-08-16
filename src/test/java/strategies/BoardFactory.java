@@ -129,7 +129,7 @@ public class BoardFactory {
                     break;
                 case '@':
                     row.add(new EmptyTile(new Coordinate(rowCount, colCount)));
-                    pusher = new Pusher(new Coordinate(rowCount, colCount++));
+                    pusher.setCoordinate(new Coordinate(rowCount, colCount++));
                     break;
                 case '\n':
                     newLine = true;

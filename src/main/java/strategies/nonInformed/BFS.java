@@ -1,11 +1,10 @@
 package strategies.nonInformed;
 
-import game.Board;
+import game.*;
 import strategies.utils.Path;
-import game.Pusher;
-import game.Direction;
 import strategies.SearchStrategy;
 import strategies.utils.Node;
+import strategies.utils.Step;
 
 import java.util.*;
 
@@ -16,56 +15,50 @@ public class BFS extends SearchStrategy {
     }
 
     private final Board board;
-//    private Queue<Node> queue = new ArrayDeque<>();
-//    private Set<Node> visited = new HashSet<>();
-//
-//    private void setStateToBoard(final Node node) {
-//
-//        board.setBoxList(new ArrayList<>(node.getBoxList()));
-//        board.setPusher(new Pusher(node.getPusher()));
-//    }
-//
-//    private void simulateMovesAndAddToQueue(final Node currentNode) {
-//        setDataToBoard(currentNode);
-//        final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove();
-//        for (Direction direction : directionsToMovePusher) {
-//            Node backupNode = new Node(currentNode.getPusher(), currentNode.getBoxList());
-//            setDataToBoard(backupNode);
-//            board.moveTo(direction);
-//            printPath(board.getPusher().getPath());
-//            Node newNode = new Node(board.getPusher(), board.getBoxList());
-//            if(!visited.contains(newNode)) {
-//                queue.add(newNode);
-//            }
-//        }
-//        setDataToBoard(currentNode);
-//    }
-//
-//    private void printPath(final Path path) {
-//        System.out.println("Steps size "+ path.getSteps().size());
-//        //path.getSteps().forEach(step -> System.out.println("(" + step.getFrom().toString() + " - " + step.getTo().toString() + ")"));
-//    }
+    private Queue<Node> queue = new ArrayDeque<>();
+    private Set<State> visited = new HashSet<>();
+
+    private void setStateToBoard(final Node node) {
+        board.setState(node.getState());
+    }
+
+    private void simulateMovesAndAddToQueue(final Node currentNode) {
+        final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove();
+        for (Direction direction : directionsToMovePusher) {
+            Node newNode = new Node(currentNode, new State(currentNode.getState()));
+            Coordinate previousCoordinate = currentNode.getState().getPusher().getCoordinate();
+            setStateToBoard(newNode);
+            Coordinate newCoordinate = board.moveTo(direction);
+            newNode.setStep(new Step(previousCoordinate, newCoordinate));
+            if(!visited.contains(newNode.getState())) {
+                queue.add(newNode);
+            }
+        }
+        setStateToBoard(currentNode);
+    }
 
     @Override
     public Path findSolution() {
-//        Node currentNode = new Node(board.getPusher(), board.getBoxList());
-//        queue.add(currentNode);
-//        while (!queue.isEmpty()) {
-//            currentNode = queue.poll();
-//            System.out.println(currentNode);
-//            if (!visited.contains(currentNode)) {
-//                if (!board.gameHasEnded(currentNode.getBoxList())) {
-//                    simulateMovesAndAddToQueue(currentNode);
-//                } else {
-//                    setDataToBoard(currentNode);
-//                    return currentNode.getPusher().getPath();
-//                }
-//            } else {
-//                System.out.println("Ya visitado");
-//            }
-//            visited.add(currentNode);
-//        }
-//        // DEADLOCK
+        Node currentNode = new Node(null, board.getState(), null, 0);
+        queue.add(currentNode);
+        while (!queue.isEmpty()) {
+            currentNode = queue.poll();
+            System.out.println(currentNode);
+            setStateToBoard(currentNode);
+            if (!visited.contains(currentNode.getState())) {
+                if (!board.gameHasEnded()) {
+                    simulateMovesAndAddToQueue(currentNode);
+                } else {
+                    Path result = new Path(currentNode);
+                    System.out.println(result);
+                    return result;
+                }
+            } else {
+                System.out.println("Ya visitado");
+            }
+            visited.add(currentNode.getState());
+        }
+        // DEADLOCK
         return null;
     }
 }

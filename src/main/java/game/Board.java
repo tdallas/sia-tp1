@@ -26,7 +26,7 @@ public class Board {
         put(LEFT, new Coordinate(0, -1));
     }};
 
-    public void setPusher(final State state){
+    public void setState(final State state){
         this.state = state;
     }
 
@@ -123,16 +123,18 @@ public class Board {
      * @param direction
      * @throws Exception
      */
-    public void moveTo(final Direction direction) {
+    public Coordinate moveTo(final Direction direction) {
         final Coordinate coordinateToMove = getCoordinateToMoveTo(state.getPusher().getCoordinate(), direction, false);
         if (coordinateToMove != null) {
             if (!isFinalTileAndContainsBox(coordinateToMove)) {
                 moveBoxIfPossible(coordinateToMove, direction);
                 state.getPusher().setCoordinate(coordinateToMove);
+                return coordinateToMove;
             } else {
                 // FIXME THROW AN ERROR or something like that
             }
         }
+        return null;
     }
 
     protected boolean isFinalTileAndContainsBox(Coordinate coordinateToMove) {

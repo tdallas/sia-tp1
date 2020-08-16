@@ -11,7 +11,9 @@ public class Path {
     public Path(Node node){
         this.steps = new LinkedList<>();
         while(node != null){
-            this.steps.add(node.getStep());
+            if(node.getStep() != null) {
+                this.steps.add(node.getStep());
+            }
             node = node.getParent();
         }
         Collections.reverse(steps);
