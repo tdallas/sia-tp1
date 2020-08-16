@@ -153,6 +153,25 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldNotMoveAnythingIfPusherIsTryingToMoveTwoConsecutiveBoxes() {
+        currentBoard.getInitialState().getPusher().setCoordinate(new Coordinate(2,3));
+        State newState = currentBoard.moveTo(LEFT, currentBoard.getInitialState());
+        assertNull(newState);
+    }
+
+    @Test
+    public void shouldNotBeAValidMoveIfPusherIsTryingToMoveTwoConsecutiveBoxes() {
+        currentBoard.getInitialState().getPusher().setCoordinate(new Coordinate(2,3));
+
+        List<Direction> possibleMovements = currentBoard.getPusherPossibleDirectionsToMove(currentBoard.getInitialState());
+        assertFalse(possibleMovements.contains(LEFT));
+        assertTrue(possibleMovements.contains(RIGHT));
+        assertTrue(possibleMovements.contains(UP));
+        assertTrue(possibleMovements.contains(DOWN));
+
+    }
+
+    @Test
     public void stateShouldBeEqual() {
         Board board1 = BoardFactory.createBoard(BoardFactory.Level.EASY);
         Board board2 = BoardFactory.createBoard(BoardFactory.Level.EASY);

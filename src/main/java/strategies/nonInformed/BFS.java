@@ -26,6 +26,7 @@ public class BFS extends SearchStrategy {
             State newState = board.moveTo(direction, newNode.getState());
             newNode.setState(newState);
             newNode.setStep(new Step(previousCoordinate, newState.getPusher().getCoordinate()));
+            System.out.println(new Path(newNode).toString());
             if(!visited.contains(newNode.getState())) {
                 queue.add(newNode);
             }
