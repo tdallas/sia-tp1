@@ -15,35 +15,45 @@ import java.util.Set;
 
 public class BoardFactory {
 
-    final static String hard = "XXXXXXX\n" +
-            "XXX@ XX\n" +
-            "XXX**XX\n" +
-            "X    .X\n" +
-            "X   * X\n" +
-            "XX. XXX\n" +
-            "XX. XXX\n" +
-            "XXXXXXX";
+    final static String hard =  "  XXXX \n" +
+                                "  X@ X \n" +
+                                "XXX**XX\n" +
+                                "X    .X\n" +
+                                "X   * X\n" +
+                                "XX. XXX\n" +
+                                " X. X  \n" +
+                                " XXXX  ";
 
-    final static String medium = "XXXXXXX\n" +
-            "X.  . X\n" +
-            "X**   X\n" +
-            "X     X\n" +
-            "X@XX  X\n" +
-            "XXXXXXX";
+    final static String medium =    "XXXXXXX\n" +
+                                    "X.  . X\n" +
+                                    "X**   X\n" +
+                                    "X     X\n" +
+                                    "X@XX  X\n" +
+                                    "XXXXXXX";
 
-    final static String easy = "XXX\n" +
-            "X.X\n" +
-            "X X\n" +
-            "X*X\n" +
-            "X@X\n" +
-            "XXX";
+    final static String hard2 =     " XXXX\n" +
+                                    " X  XXX\n" +
+                                    " X*   X\n" +
+                                    "XX@*. X\n" +
+                                    "X *X.XX\n" +
+                                    "X   .X\n" +
+                                    "X    X\n" +
+                                    "X    X\n" +
+                                    "XXXXXX";
 
-    final static String test = "XXXXX\n" +
-            "X *.X\n" +
-            "X @XX\n" +
-            "XXXXXX";
+    final static String easy =  "XXX\n" +
+                                "X.X\n" +
+                                "X X\n" +
+                                "X*X\n" +
+                                "X@X\n" +
+                                "XXX";
 
-    public static enum Level {EASY, MEDIUM, HARD, TEST}
+    final static String test =  "XXXXX\n" +
+                                "X *.X\n" +
+                                "X @XX\n" +
+                                "XXXXXX";
+
+    public static enum Level {EASY, MEDIUM, HARD2, HARD, TEST}
 
     @AllArgsConstructor
     private static class BoardGame {
@@ -64,31 +74,17 @@ public class BoardFactory {
     private static BoardGame generateGame(final Level level) {
         switch (level) {
             case EASY:
-                return generateEasyLevel();
+                return generateLevel(easy);
             case MEDIUM:
-                return generateMediumLevel();
+                return generateLevel(medium);
+            case HARD2:
+                return generateLevel(hard2);
             case HARD:
-                return generateHardLevel();
+                return generateLevel(hard);
             case TEST:
-                return generateTestLevel();
+                return generateLevel(test);
         }
         return null;
-    }
-
-    private static BoardGame generateHardLevel() {
-        return generateLevel(hard);
-    }
-
-    private static BoardGame generateMediumLevel() {
-        return generateLevel(medium);
-    }
-
-    private static BoardGame generateEasyLevel() {
-        return generateLevel(easy);
-    }
-
-    private static BoardGame generateTestLevel() {
-        return generateLevel(test);
     }
 
     private static BoardGame generateLevel(final String level) {

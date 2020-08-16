@@ -19,6 +19,10 @@ public class Path {
         Collections.reverse(steps);
     }
 
+    public int getLength(){
+        return steps.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,9 +39,13 @@ public class Path {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Path={");
+        stringBuilder.append("Path Length=" + steps.size() +", Path={");
         for(Step step : steps){
             stringBuilder.append(step.toString());
+            stringBuilder.append(", ");
+        }
+        if(!steps.isEmpty()) {
+            stringBuilder.setLength(stringBuilder.length() - 2);
         }
         stringBuilder.append("}");
         return stringBuilder.toString();

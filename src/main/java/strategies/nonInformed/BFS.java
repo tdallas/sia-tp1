@@ -22,7 +22,9 @@ public class BFS extends SearchStrategy {
         final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove(currentNode.getState());
         for (Direction direction : directionsToMovePusher) {
             Node newNode = generateNewNode(direction, currentNode);
-            queue.add(newNode);
+            if(!visited.contains(newNode.getState())) {
+                queue.add(newNode);
+            }
         }
     }
 
@@ -45,24 +47,25 @@ public class BFS extends SearchStrategy {
 
     @Override
     public Path findSolution() {
+        setStartTime(System.currentTimeMillis());
         Node currentNode = new Node(null, board.getInitialState(), null, 0);
         queue.add(currentNode);
         while (!queue.isEmpty()) {
             currentNode = queue.poll();
-            System.out.println(currentNode);
             if (!visited.contains(currentNode.getState())) {
                 if (!board.gameHasEnded(currentNode.getState())) {
                     simulateMovesAndAddToQueue(currentNode);
                 } else {
+                    setFinishTime(System.currentTimeMillis());
+                    System.out.println("Time spent solving=" + getSolveTime());
                     Path result = new Path(currentNode);
                     System.out.println(result);
                     return result;
                 }
-            } else {
-                System.out.println("Ya visitado");
             }
             visited.add(currentNode.getState());
         }
+        setFinishTime(System.currentTimeMillis());
         // DEADLOCK
         return null;
     }
