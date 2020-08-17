@@ -89,11 +89,6 @@ public class Board {
         return boxToReturn.get(0);
     }
 
-    protected boolean isFinalTileAndContainsBox(Coordinate coordinateToMove, final State state) {
-        Tile tile = getTileIfExists(coordinateToMove);
-        return tile != null && tile.isFinalTile() && getBoxInCoordinate(coordinateToMove, state) != null;
-    }
-
     /**
      * returns true if a given boxesList are in final spots, false otherwise
      *
