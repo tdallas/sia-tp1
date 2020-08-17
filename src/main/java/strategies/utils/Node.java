@@ -21,7 +21,7 @@ public class Node {
         this.parent = parent;
         this.state = state;
         this.step = step;
-        this.cost = 0;
+        this.cost = parent.cost + 1;
     }
 
     @Override
