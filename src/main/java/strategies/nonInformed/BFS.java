@@ -11,13 +11,15 @@ import java.util.*;
 
 public class BFS extends SearchStrategy {
 
+    private final Board board;
+    private final Queue<Node> queue;
+    private final Set<State> visited;
+
     public BFS(Board board) {
         this.board = board;
+        this.queue = new ArrayDeque<>();
+        this.visited = new HashSet<>();
     }
-
-    private final Board board;
-    private Queue<Node> queue = new ArrayDeque<>();
-    private Set<State> visited = new HashSet<>();
 
     private void simulateMovesAndAddToQueue(final Node currentNode) {
         final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove(currentNode.getState());
@@ -50,7 +52,6 @@ public class BFS extends SearchStrategy {
             visited.add(currentNode.getState());
         }
         setFinishTime(System.currentTimeMillis());
-        // DEADLOCK
         return null;
     }
 }

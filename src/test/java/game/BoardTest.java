@@ -86,11 +86,6 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldReturnFalseIfItIsNotFinalTileAndContainsBox() {
-        assertFalse(currentBoard.isFinalTileAndContainsBox(new Coordinate(1,1), currentBoard.getInitialState()));
-    }
-
-    @Test
     public void gameHasNotBeenEndedIfThereIsAtLeastOneFinalTileWithoutBox() {
         assertFalse(currentBoard.gameHasEnded(currentBoard.getInitialState()));
     }
