@@ -16,10 +16,11 @@ import java.util.*;
 public class DFS extends SearchStrategy {
 
     private final Board board;
-    private Set<State> visited = new HashSet<>();
+    private final Set<State> visited;
 
     public DFS(Board board) {
         this.board = board;
+        this.visited = new HashSet<>();
     }
 
     @Override
