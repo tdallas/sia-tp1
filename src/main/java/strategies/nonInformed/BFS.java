@@ -50,7 +50,6 @@ public class BFS extends SearchStrategy {
             visited.add(currentNode.getState());
         }
         setFinishTime(System.currentTimeMillis());
-        // DEADLOCK
         return null;
     }
 }

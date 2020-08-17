@@ -24,6 +24,7 @@ public class DFS extends SearchStrategy {
 
     @Override
     public Path findSolution() {
+        setStartTime(System.currentTimeMillis());
         Node firstNode = new Node(null, board.getInitialState(), null, 0);
         if (board.gameHasEnded(firstNode.getState())) {
             return new Path(firstNode);
@@ -37,32 +38,18 @@ public class DFS extends SearchStrategy {
                 for (Direction direction : directionsToMove) {
                     final Node possibleEndNode = Node.generateNewNode(direction, currentNode, board);
                     if (board.gameHasEnded(possibleEndNode.getState())) {
-                        System.out.println(possibleEndNode.getState().getBoxes());
-                        return new Path(possibleEndNode);
+                        setFinishTime(System.currentTimeMillis());
+                        System.out.println("Time spent solving=" + getSolveTime());
+                        Path result = new Path(currentNode);
+                        System.out.println(result);
+                        return result;
                     }
                     stack.push(possibleEndNode);
                 }
                 visited.add(currentNode.getState());
             }
         }
-        return null;
-    }
-
-    private Node findSolutionUsingDFS(final Node currentNode) {
-        if (board.gameHasEnded(currentNode.getState())) {
-            return currentNode;
-        }
-        if (visited.contains(currentNode.getState())) {
-            return null;
-        }
-        visited.add(currentNode.getState());
-        for (Direction direction : board.getPusherPossibleDirectionsToMove(currentNode.getState())) {
-            final Node newNode = Node.generateNewNode(direction, currentNode, board);
-            final Node possibleEndNode = findSolutionUsingDFS(newNode);
-            if (possibleEndNode != null) {
-                return possibleEndNode;
-            }
-        }
+        setFinishTime(System.currentTimeMillis());
         return null;
     }
 }
