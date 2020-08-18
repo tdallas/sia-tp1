@@ -2,6 +2,7 @@ package strategies;
 
 import game.Board;
 import org.junit.Test;
+import strategies.heuristics.nonTrivials.GlobalMinEuclidean;
 import strategies.heuristics.nonTrivials.GlobalMinManhattan;
 import strategies.heuristics.trivials.Euclidean;
 import strategies.heuristics.trivials.Manhattan;
@@ -62,8 +63,16 @@ public class AStarTest {
     }
 
     @Test
-    public void hard2SolutionWithManhattan() {
+    public void hardSolutionWithGlobalMinEuclidean() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+        AStar aStar = new AStar(board, new GlobalMinEuclidean(board.getFinishCoordinates()));
+        Path finalPath = aStar.findSolution();
+        assertNotNull(finalPath);
+    }
+
+    @Test
+    public void hard2SolutionWithManhattan() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
         AStar aStar = new AStar(board, new Manhattan(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
@@ -71,7 +80,7 @@ public class AStarTest {
 
     @Test
     public void hard2SolutionWithEuclidean() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
         AStar aStar = new AStar(board, new Euclidean(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
@@ -79,8 +88,16 @@ public class AStarTest {
 
     @Test
     public void hard2SolutionWithGlobalMinManhattan() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
         AStar aStar = new AStar(board, new GlobalMinManhattan(board.getFinishCoordinates()));
+        Path finalPath = aStar.findSolution();
+        assertNotNull(finalPath);
+    }
+
+    @Test
+    public void hard2SolutionWithGlobalMinEuclidean() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
+        AStar aStar = new AStar(board, new GlobalMinEuclidean(board.getFinishCoordinates()));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
     }

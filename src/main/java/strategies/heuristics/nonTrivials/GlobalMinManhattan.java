@@ -16,11 +16,10 @@ public class GlobalMinManhattan extends Heuristic {
 
     @Override
     public double evaluate(State currentState) {
-        Set<Coordinate> boxCoordinatesSet = currentState.getBoxes();
 
-        double sumValue = calculateMinDistance(currentState.getPusher(), boxCoordinatesSet);
+        double sumValue = calculateMinDistance(currentState.getPusher(), currentState.getBoxes());
 
-        for (Coordinate boxCoordinate : boxCoordinatesSet) {
+        for (Coordinate boxCoordinate : currentState.getBoxes()) {
             sumValue += calculateMinDistance(boxCoordinate, getFinishTiles());
         }
 
@@ -29,11 +28,12 @@ public class GlobalMinManhattan extends Heuristic {
 
     @Override
     protected double calculateMinDistance(Coordinate current, Set<Coordinate> coordinateSet) {
+        double currentDistance;
         for (Coordinate coordinate : coordinateSet) {
-            double currentManhattanDistance = manhattanDistance(current, coordinate);
-            if (currentManhattanDistance < previous) {
-                previous = currentManhattanDistance;
-                return currentManhattanDistance;
+            currentDistance = manhattanDistance(current, coordinate);
+            if (currentDistance < previous) {
+                previous = currentDistance;
+                return currentDistance;
             }
         }
 
@@ -41,7 +41,7 @@ public class GlobalMinManhattan extends Heuristic {
     }
 
     private double euclideanDistance(final Coordinate from, final Coordinate to) {
-        return Math.sqrt(Math.pow(from.getX() - to.getX(), 2) + Math.pow(from.getY() - to.getY(), 2));
+        return Math.hypot(from.getX() - to.getX(), from.getY() - to.getY());
     }
 
     private double manhattanDistance(final Coordinate from, final Coordinate to) {

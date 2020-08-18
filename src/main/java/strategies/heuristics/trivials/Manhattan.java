@@ -14,11 +14,10 @@ public class Manhattan extends Heuristic {
 
     @Override
     public double evaluate(State currentState) {
-        Set<Coordinate> boxCoordinatesSet = currentState.getBoxes();
-        // Initialize sumValue to manhattan distance from player to closest box
-        double sumValue = calculateMinDistance(currentState.getPusher(), boxCoordinatesSet);
 
-        for (Coordinate boxCoordinate : boxCoordinatesSet) {
+        double sumValue = calculateMinDistance(currentState.getPusher(), currentState.getBoxes());
+
+        for (Coordinate boxCoordinate : currentState.getBoxes()) {
             sumValue += calculateMinDistance(boxCoordinate, getFinishTiles());
         }
 
@@ -27,12 +26,12 @@ public class Manhattan extends Heuristic {
 
     @Override
     protected double calculateMinDistance(Coordinate current, Set<Coordinate> coordinateSet) {
-        double minDistance = Double.MAX_VALUE;
+        double minDistance = Double.MAX_VALUE, currentDistance;
 
         for (Coordinate coordinate : coordinateSet) {
-            double currentManhattanDistance = manhattanDistance(current, coordinate);
-            if (currentManhattanDistance < minDistance) {
-                minDistance = currentManhattanDistance;
+            currentDistance = manhattanDistance(current, coordinate);
+            if (currentDistance < minDistance) {
+                minDistance = currentDistance;
             }
         }
 
