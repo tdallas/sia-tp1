@@ -3,18 +3,16 @@ package strategies.utils;
 import game.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
-@Setter
 public class Node {
     private final Node parent;
-    private State state;
-    private Step step;
-    private int cost;
+    private final State state;
+    private final Step step;
+    private final int cost;
 
     public Node(Node parent, State state, Step step) {
         this.parent = parent;

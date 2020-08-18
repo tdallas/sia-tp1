@@ -1,9 +1,7 @@
 package game;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import strategies.utils.Node;
 
 import java.util.HashSet;
 import java.util.Objects;

@@ -5,7 +5,6 @@ import game.Direction;
 import game.State;
 import strategies.SearchStrategy;
 import strategies.heuristics.Heuristic;
-import strategies.heuristics.trivials.Euclidean;
 import strategies.utils.Node;
 import strategies.utils.Path;
 
@@ -18,24 +17,23 @@ public class AStar extends SearchStrategy {
     public Comparator<Node> aStarComparator = (firstNode, secondNode) ->
             (int) ((firstNode.getCost() + heuristic.evaluate(firstNode.getState())) -
                     (secondNode.getCost()) + heuristic.evaluate(secondNode.getState()));
-    private final Board board;
     private final Queue<Node> priorityQueue = new PriorityQueue<>(aStarComparator);
     private final Set<State> visited = new HashSet<>();
 
     public AStar(final Board board, final Heuristic heuristic) {
-        this.board = board;
+        super(board);
         this.heuristic = heuristic;
     }
 
     @Override
     public Path findSolution() {
         setStartTime(System.currentTimeMillis());
-        Node currentNode = new Node(null, board.getInitialState(), null, 0);
+        Node currentNode = new Node(null, getBoard().getInitialState(), null, 0);
         priorityQueue.add(currentNode);
         while (!priorityQueue.isEmpty()) {
             currentNode = priorityQueue.poll();
             if (!visited.contains(currentNode.getState())) {
-                if (!board.gameHasEnded(currentNode.getState())) {
+                if (!getBoard().gameHasEnded(currentNode.getState())) {
                     simulateMovesAndAddToQueue(currentNode);
                 } else {
                     setFinishTime(System.currentTimeMillis());
@@ -52,7 +50,7 @@ public class AStar extends SearchStrategy {
     }
 
     private void simulateMovesAndAddToQueue(final Node currentNode) {
-        final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove(currentNode.getState());
+        final List<Direction> directionsToMovePusher = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
         for (Direction direction : directionsToMovePusher) {
             Node newNode = Node.generateNewNode(direction, currentNode);
             if(!visited.contains(newNode.getState())) {

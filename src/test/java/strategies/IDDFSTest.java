@@ -2,49 +2,49 @@ package strategies;
 
 import game.Board;
 import org.junit.Test;
-import strategies.nonInformed.IDFS;
+import strategies.nonInformed.IDDFS;
 import strategies.utils.Path;
 
 import static org.junit.Assert.assertNotNull;
 
-public class IDFSTest {
+public class IDDFSTest {
     @Test
-    public void resolvingTestLevelUsingIDFS() {
+    public void resolvingTestLevelUsingIDDFS() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.TEST);
-        IDFS idfs = new IDFS(board);
-        Path finalPath = idfs.findSolution();
+        IDDFS IDDFS = new IDDFS(board, 1000);
+        Path finalPath = IDDFS.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void resolvingEasyLevelUsingIDFS() {
+    public void resolvingEasyLevelUsingIDDFS() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.EASY);
-        IDFS idfs = new IDFS(board);
-        Path finalPath = idfs.findSolution();
+        IDDFS IDDFS = new IDDFS(board, 1000);
+        Path finalPath = IDDFS.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void resolvingMediumLevelUsingIDFS() {
+    public void resolvingMediumLevelUsingIDDFS() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
-        IDFS idfs = new IDFS(board);
-        Path finalPath = idfs.findSolution();
+        IDDFS IDDFS = new IDDFS(board, 1000);
+        Path finalPath = IDDFS.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void resolvingHardLevelUsingIDFS() {
+    public void resolvingHardLevelUsingIDDFS() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
-        IDFS idfs = new IDFS(board);
-        Path finalPath = idfs.findSolution();
+        IDDFS IDDFS = new IDDFS(board, 1000);
+        Path finalPath = IDDFS.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void resolvingHard2LevelUsingIDFS() {
+    public void resolvingHard2LevelUsingIDDFS() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
-        IDFS idfs = new IDFS(board);
-        Path finalPath = idfs.findSolution();
+        IDDFS IDDFS = new IDDFS(board, 1000);
+        Path finalPath = IDDFS.findSolution();
         assertNotNull(finalPath);
     }
 }

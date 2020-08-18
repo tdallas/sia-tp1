@@ -4,7 +4,6 @@ import game.Coordinate;
 import game.State;
 import strategies.heuristics.Heuristic;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class Manhattan extends Heuristic {
@@ -15,7 +14,7 @@ public class Manhattan extends Heuristic {
 
     @Override
     public double evaluate(State currentState) {
-        Set<Coordinate> boxCoordinatesSet = new HashSet<>(currentState.getBoxes());
+        Set<Coordinate> boxCoordinatesSet = currentState.getBoxes();
         // Initialize sumValue to manhattan distance from player to closest box
         double sumValue = calculateMinDistance(currentState.getPusher(), boxCoordinatesSet);
 
