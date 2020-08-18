@@ -1,16 +1,9 @@
 package strategies;
 
 import game.*;
-import game.tiles.EmptyTile;
-import game.tiles.FinishTile;
-import game.tiles.RockTile;
-import game.tiles.Tile;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class BoardFactory {
@@ -53,20 +46,33 @@ public class BoardFactory {
                                 "X @XX\n" +
                                 "XXXXXX";
 
-    public static enum Level {EASY, MEDIUM, HARD2, HARD, TEST}
+    final static String hard3 = "XXXXXXXXXXXX\n" +
+                                "X..  X     XXX\n" +
+                                "X..  X *  *  X\n" +
+                                "X..  X*XXXX  X\n" +
+                                "X..    @ XX  X\n" +
+                                "X..  X X  * XX\n" +
+                                "XXXXXX XX* * X\n" +
+                                "  X *  * * * X\n" +
+                                "  X    X     X\n" +
+                                "  XXXXXXXXXXXX";
+
+    public static enum Level {EASY, MEDIUM, HARD2, HARD, TEST, HARD3}
 
     @AllArgsConstructor
     private static class BoardGame {
-        private final List<List<Tile>> matrix;
-        private final List<Coordinate> finishPositions;
+        private final Set<Coordinate> finishTiles;
+        private final Set<Coordinate> rockTiles;
+        private final Set<Coordinate> emptyTiles;
         private final State state;
     }
 
     public static Board createBoard(final Level level) {
         BoardGame boardGame = generateGame(level);
 
-        return new Board(boardGame.matrix,
-                boardGame.finishPositions,
+        return new Board(boardGame.finishTiles,
+                boardGame.rockTiles,
+                boardGame.emptyTiles,
                 boardGame.state
         );
     }
@@ -81,6 +87,8 @@ public class BoardFactory {
                 return generateLevel(hard2);
             case HARD:
                 return generateLevel(hard);
+            case HARD3:
+                return generateLevel(hard3);
             case TEST:
                 return generateLevel(test);
         }
@@ -88,42 +96,37 @@ public class BoardFactory {
     }
 
     private static BoardGame generateLevel(final String level) {
-        List<List<Tile>> map = new ArrayList<>();
-        Set<Box> boxes = new HashSet<>();
-        List<Coordinate> finishPositions = new ArrayList<>();
-        Pusher pusher = new Pusher();
-        State state = new State(pusher, boxes);
+        Set<Coordinate> boxes = new HashSet<>();
+        Set<Coordinate> finishTiles = new HashSet<>();
+        Set<Coordinate> rockTiles = new HashSet<>();
+        Set<Coordinate> emptyTiles = new HashSet<>();
+        Coordinate pusher = null;
         boolean newLine = true;
-        List<Tile> row = new ArrayList<>();
         int colCount = 0;
         int rowCount = 0;
-        int boxCount = 0;
         for (int i = 0; i < level.length(); i++) {
             if (newLine) {
-                if (rowCount != 0) map.add(row);
                 colCount = 0;
-                row = new ArrayList<>();
                 newLine = false;
             }
             char item = level.charAt(i);
             switch (item) {
                 case 'X':
-                    row.add(new RockTile(new Coordinate(rowCount, colCount++)));
+                    rockTiles.add(new Coordinate(rowCount, colCount++));
                     break;
                 case ' ':
-                    row.add(new EmptyTile(new Coordinate(rowCount, colCount++)));
+                    emptyTiles.add(new Coordinate(rowCount, colCount++));
                     break;
                 case '.':
-                    row.add(new FinishTile(new Coordinate(rowCount, colCount)));
-                    finishPositions.add(new Coordinate(rowCount, colCount++));
+                    finishTiles.add(new Coordinate(rowCount, colCount++));
                     break;
                 case '*':
-                    row.add(new EmptyTile(new Coordinate(rowCount, colCount)));
-                    boxes.add(new Box("Box" + boxCount++, new Coordinate(rowCount, colCount++)));
+                    emptyTiles.add(new Coordinate(rowCount, colCount));
+                    boxes.add(new Coordinate(rowCount, colCount++));
                     break;
                 case '@':
-                    row.add(new EmptyTile(new Coordinate(rowCount, colCount)));
-                    pusher.setCoordinate(new Coordinate(rowCount, colCount++));
+                    emptyTiles.add(new Coordinate(rowCount, colCount));
+                    pusher = new Coordinate(rowCount, colCount++);
                     break;
                 case '\n':
                     newLine = true;
@@ -134,6 +137,7 @@ public class BoardFactory {
             }
 
         }
-        return new BoardGame(map, finishPositions, state);
+        State state = new State(pusher, boxes);
+        return new BoardGame(finishTiles, rockTiles, emptyTiles, state);
     }
 }

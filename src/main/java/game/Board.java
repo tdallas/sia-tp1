@@ -1,9 +1,11 @@
 package game;
 
+import game.tiles.EmptyTile;
+import game.tiles.FinishTile;
+import game.tiles.RockTile;
 import game.tiles.Tile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import strategies.utils.Step;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,8 +15,9 @@ import static game.Direction.*;
 @AllArgsConstructor
 @Getter
 public class Board {
-    private final List<List<Tile>> matrix;
-    private final List<Coordinate> finishPositions;
+    private final Set<Coordinate> finishCoordinates;
+    private final Set<Coordinate> rockCoordinates;
+    private final Set<Coordinate> emptyCoordinates;
     private final State initialState;
 
     public static final Map<Direction, Coordinate> coordinateVectorMap = new HashMap<>() {{
@@ -25,42 +28,38 @@ public class Board {
     }};
 
     /**
-     * Returns the Tile on the given coordinate, or null if the coordinate is invalid
+     * Returns the Tile on the given coordinate or a RockTile with the given coordinate
      *
      * @param coordinate
      * @return
      */
     protected Tile getTileIfExists(final Coordinate coordinate) {
-        if(coordinate != null) {
-            if (coordinate.getX() >= matrix.size() || coordinate.getX() < 0) {
-                return null;
-            }
-            final List<Tile> row = matrix.get(coordinate.getX());
-            if (row != null && row.size() > 0) {
-                if (coordinate.getY() >= row.size() || coordinate.getY() < 0) {
-                    return null;
-                }
-                return row.get(coordinate.getY());
-            }
+        if(emptyCoordinates.contains(coordinate)){
+            return new EmptyTile(coordinate);
         }
-        return null;
+        else if(finishCoordinates.contains(coordinate)){
+            return new FinishTile(coordinate);
+        }
+        else {
+            return new RockTile(coordinate);
+        }
     }
 
     /**
      * Returns coordinate to move if it exists and if walkable, otherwise null
      *
-     * @param fromCoordinate
      * @param direction
      * @return
      */
-    protected Coordinate getPusherCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction, final State state) {
-        final Coordinate firstCoordinateNext = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
+    protected Coordinate getPusherCoordinateToMoveTo(final Direction direction, final State state) {
+        final Coordinate firstCoordinateNext = Coordinate.add(state.getPusher(), coordinateVectorMap.get(direction));
         final Tile firstTileNext = getTileIfExists(firstCoordinateNext);
         if (firstTileNext != null && firstTileNext.isWalkable()) {
             final Coordinate secondCoordinateNext = Coordinate.add(firstCoordinateNext, coordinateVectorMap.get(direction));
-            if (!coordinateContainsBox(firstCoordinateNext, state)) {
+            final Tile secondTileNext = getTileIfExists(secondCoordinateNext);
+            if (!stateContainsBoxAt(firstCoordinateNext, state)) {
                 return firstCoordinateNext;
-            } else if (getTileIfExists(secondCoordinateNext) != null && !coordinateContainsBox(secondCoordinateNext, state)) {
+            } else if (secondTileNext != null && secondTileNext.isWalkable() && !stateContainsBoxAt(secondCoordinateNext, state)) {
                 return firstCoordinateNext;
             }
         }
@@ -77,8 +76,9 @@ public class Board {
         return coordinateVectorMap
                 .keySet()
                 .parallelStream()
-                .filter(direction -> getPusherCoordinateToMoveTo(state.getPusher().getCoordinate(), direction, state) != null)
+                .filter(direction -> getPusherCoordinateToMoveTo(direction, state) != null)
                 .collect(Collectors.toList());
+
     }
 
     /**
@@ -88,27 +88,8 @@ public class Board {
      * @param state
      * @return
      */
-    public boolean coordinateContainsBox(final Coordinate coordinate, final State state) {
-        return state.getBoxes()
-                .parallelStream()
-                .map(Box::getCoordinate)
-                .anyMatch(c -> c.equals(coordinate));
-    }
-
-    /**
-     * Returns the box in the coordinate or null if there is no box on that coordinate
-     *
-     * @param coordinate
-     * @param state
-     * @return
-     */
-    public Box getBoxInCoordinate(final Coordinate coordinate, final State state) {
-        List<Box> boxToReturn = state.getBoxes()
-                .parallelStream()
-                .filter(box -> box.getCoordinate().equals(coordinate))
-                .collect(Collectors.toList());
-        if (boxToReturn.size() == 0) return null;
-        return boxToReturn.get(0);
+    public boolean stateContainsBoxAt(final Coordinate coordinate, final State state) {
+        return state.getBoxes().contains(coordinate);
     }
 
     /**
@@ -118,13 +99,12 @@ public class Board {
      * @return
      */
     public boolean gameHasEnded(final State state) {
-        return state.getBoxes()
-                .parallelStream()
-                .map(box -> {
-                    final Tile boxTile = getTileIfExists(box.getCoordinate());
-                    return boxTile != null && boxTile.isFinalTile();
-                })
-                .reduce(true, (acum, current) -> acum && current);
+        for(Coordinate coordinate : finishCoordinates){
+            if(!state.getBoxes().contains(coordinate)){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -134,41 +114,77 @@ public class Board {
      * @return
      */
     public boolean isDeadlock(final State state) {
-//        for (Box box : state.getBoxes()) {
-//            int row = box.row;
-//            int col = box.col;
-//            if (!setContains(goals, row, col)) {
-//                if (setContains(walls, row-1, col)&&setContains(walls, row, col-1))
-//                    return true; //top & left
-//                if (setContains(walls, row-1, col)&&setContains(walls, row, col+1))
-//                    return true; //top & right
-//                if (setContains(walls, row+1, col)&&setContains(walls, row, col-1))
-//                    return true; //bottom & left
-//                if (setContains(walls, row+1, col)&&setContains(walls, row, col+1))
-//                    return true; //bottom & right
-//
-//                if (setContains(walls, row-1, col-1)&&setContains(walls, row-1, col)&&
-//                        setContains(walls, row-1, col+1)&&setContains(walls, row, col-2)&&
-//                        setContains(walls, row, col+2)&&(!setContains(goals, row, col-1))&&
-//                        !setContains(goals, row, col+1))
-//                    return true; //top & sides
-//                if (setContains(walls, row+1, col-1)&&setContains(walls, row+1, col)&&
-//                        setContains(walls, row+1, col+1)&&setContains(walls, row, col-2)&&
-//                        setContains(walls, row, col+2)&&(!setContains(goals, row, col-1))&&
-//                        (!setContains(goals, row, col+1)))
-//                    return true; //bottom & sides
-//                if (setContains(walls, row-1, col-1)&&setContains(walls, row, col-1)&&
-//                        setContains(walls, row+1, col-1)&&setContains(walls, row-2, col)&&
-//                        setContains(walls, row+2, col)&&(!setContains(goals, row-1, col))&&
-//                        (!setContains(goals, row+1, col)))
-//                    return true; //left & vertical
-//                if (setContains(walls, row-1, col+1)&&setContains(walls, row, col+1)&&
-//                        setContains(walls, row+1, col+1)&&setContains(walls, row-2, col)&&
-//                        setContains(walls, row+2, col)&&(!setContains(goals, row-1, col))&&
-//                        (!setContains(goals, row+1, col)))
-//                    return true; //right & top/bottom
-//            }
-//        }
+        Tile center, up, down, left, right, upLeft, upRight, downLeft, downRight, downDown, upUp, rightRight, leftLeft;
+        for(Coordinate box : state.getBoxes()){
+            center = getTileIfExists(box);
+            int xCoordinate = box.getX();
+            int yCoordinate = box.getY();
+            if(!center.isFinalTile()){
+                up = getTileIfExists(new Coordinate(xCoordinate - 1, yCoordinate));
+                down = getTileIfExists(new Coordinate(xCoordinate + 1, yCoordinate));
+                left = getTileIfExists(new Coordinate(xCoordinate, yCoordinate - 1));
+                right = getTileIfExists(new Coordinate(xCoordinate, yCoordinate + 1));
+
+                if(!up.isWalkable() && !left.isWalkable()){
+                    return true;
+                }
+                if(!up.isWalkable() && !right.isWalkable()){
+                    return true;
+                }
+                if(!down.isWalkable() && !right.isWalkable()){
+                    return true;
+                }
+                if(!down.isWalkable() && !left.isWalkable()){
+                    return true;
+                }
+
+                upLeft = getTileIfExists(new Coordinate(xCoordinate - 1, yCoordinate - 1));
+                upRight = getTileIfExists(new Coordinate(xCoordinate - 1, yCoordinate + 1));
+                downLeft = getTileIfExists(new Coordinate(xCoordinate + 1, yCoordinate - 1));
+                downRight = getTileIfExists(new Coordinate(xCoordinate + 1, yCoordinate + 1));
+                upUp = getTileIfExists(new Coordinate(xCoordinate - 2, yCoordinate));
+                downDown = getTileIfExists(new Coordinate(xCoordinate + 2, yCoordinate));
+                leftLeft = getTileIfExists(new Coordinate(xCoordinate, yCoordinate - 2));
+                rightRight = getTileIfExists(new Coordinate(xCoordinate, yCoordinate + 2));
+
+                if (!upLeft.isWalkable() &&
+                        !up.isWalkable() &&
+                        !upRight.isWalkable() &&
+                        !leftLeft.isWalkable() &&
+                        !rightRight.isWalkable() &&
+                        !left.isFinalTile() &&
+                        !right.isFinalTile()) {
+                    return true;  //top & sides
+                }
+                if (!downLeft.isWalkable() &&
+                        !down.isWalkable() &&
+                        !downRight.isWalkable() &&
+                        !leftLeft.isWalkable() &&
+                        !rightRight.isWalkable() &&
+                        !left.isFinalTile() &&
+                        !right.isFinalTile()) {
+                    return true; //bottom & sides
+                }
+                if (!upLeft.isWalkable() &&
+                        !left.isWalkable() &&
+                        !downLeft.isWalkable() &&
+                        !upUp.isWalkable() &&
+                        !downDown.isWalkable() &&
+                        !up.isFinalTile() &&
+                        !down.isFinalTile()) {
+                    return true; //left & vertical
+                }
+                if (!upRight.isWalkable() &&
+                        !right.isWalkable() &&
+                        !downRight.isWalkable() &&
+                        !upUp.isWalkable() &&
+                        !downDown.isWalkable() &&
+                        !up.isFinalTile() &&
+                        !down.isFinalTile()) {
+                    return true; //right & top/bottom
+                }
+            }
+        }
         return false;
     }
 }

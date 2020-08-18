@@ -5,13 +5,15 @@ import org.junit.Test;
 import strategies.nonInformed.DFS;
 import strategies.utils.Path;
 
+import static org.junit.Assert.assertNotNull;
+
 public class DFSTest {
     @Test
     public void resolvingTestLevelUsingDFS() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.TEST);
         DFS dfs = new DFS(board);
         Path finalPath = dfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -19,7 +21,7 @@ public class DFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.EASY);
         DFS dfs = new DFS(board);
         Path finalPath = dfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -27,7 +29,7 @@ public class DFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
         DFS dfs = new DFS(board);
         Path finalPath = dfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -35,7 +37,7 @@ public class DFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
         DFS dfs = new DFS(board);
         Path finalPath = dfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -43,6 +45,6 @@ public class DFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
         DFS dfs = new DFS(board);
         Path finalPath = dfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 }
