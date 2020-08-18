@@ -28,9 +28,9 @@ public class IDFS extends SearchStrategy {
             this.visited = new HashSet<>();
             currentNode = new Node(null, board.getInitialState(), null, 0);
             currentNode = findSolutionUsingIDFS(currentNode, depth++);
-            System.out.println("Depth=" + depth);
         }
         setFinishTime(System.currentTimeMillis());
+        System.out.println("Final depth=" + depth);
         System.out.println("Time spent solving=" + getSolveTime());
         Path result = new Path(currentNode);
         System.out.println(result);

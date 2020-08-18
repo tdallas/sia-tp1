@@ -18,6 +18,8 @@ public class Box {
         this.coordinate = box.coordinate;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,7 +30,7 @@ public class Box {
 
     @Override
     public int hashCode() {
-        return Objects.hash(label, coordinate);
+        return Objects.hash(coordinate);
     }
 
     @Override

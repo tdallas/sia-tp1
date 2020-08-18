@@ -39,6 +39,7 @@ public class DFS extends SearchStrategy {
                 for (Direction direction : directionsToMove) {
                     final Node possibleEndNode = Node.generateNewNode(direction, currentNode, board);
                     if (board.gameHasEnded(possibleEndNode.getState())) {
+                        currentNode = possibleEndNode;
                         setFinishTime(System.currentTimeMillis());
                         System.out.println("Time spent solving=" + getSolveTime());
                         Path result = new Path(currentNode);

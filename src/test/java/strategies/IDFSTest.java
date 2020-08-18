@@ -5,13 +5,15 @@ import org.junit.Test;
 import strategies.nonInformed.IDFS;
 import strategies.utils.Path;
 
+import static org.junit.Assert.assertNotNull;
+
 public class IDFSTest {
     @Test
     public void resolvingTestLevelUsingIDFS() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.TEST);
         IDFS idfs = new IDFS(board);
         Path finalPath = idfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -19,7 +21,7 @@ public class IDFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.EASY);
         IDFS idfs = new IDFS(board);
         Path finalPath = idfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -27,7 +29,7 @@ public class IDFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
         IDFS idfs = new IDFS(board);
         Path finalPath = idfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -35,7 +37,7 @@ public class IDFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
         IDFS idfs = new IDFS(board);
         Path finalPath = idfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 
     @Test
@@ -43,6 +45,6 @@ public class IDFSTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
         IDFS idfs = new IDFS(board);
         Path finalPath = idfs.findSolution();
-        System.out.println(finalPath);
+        assertNotNull(finalPath);
     }
 }

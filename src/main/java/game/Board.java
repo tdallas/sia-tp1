@@ -1,5 +1,8 @@
 package game;
 
+import game.tiles.EmptyTile;
+import game.tiles.FinishTile;
+import game.tiles.RockTile;
 import game.tiles.Tile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +16,9 @@ import static game.Direction.*;
 @AllArgsConstructor
 @Getter
 public class Board {
-    private final List<List<Tile>> matrix;
-    private final List<Coordinate> finishPositions;
+    private final Set<Coordinate> finishCoordinates;
+    private final Set<Coordinate> rockCoordinates;
+    private final Set<Coordinate> emptyCoordinates;
     private final State initialState;
 
     public static final Map<Direction, Coordinate> coordinateVectorMap = new HashMap<>() {{
@@ -31,17 +35,14 @@ public class Board {
      * @return
      */
     protected Tile getTileIfExists(final Coordinate coordinate) {
-        if(coordinate != null) {
-            if (coordinate.getX() >= matrix.size() || coordinate.getX() < 0) {
-                return null;
-            }
-            final List<Tile> row = matrix.get(coordinate.getX());
-            if (row != null && row.size() > 0) {
-                if (coordinate.getY() >= row.size() || coordinate.getY() < 0) {
-                    return null;
-                }
-                return row.get(coordinate.getY());
-            }
+        if(emptyCoordinates.contains(coordinate)){
+            return new EmptyTile(coordinate);
+        }
+        else if(rockCoordinates.contains(coordinate)){
+            return new RockTile(coordinate);
+        }
+        else if(finishCoordinates.contains(coordinate)){
+            return new FinishTile(coordinate);
         }
         return null;
     }
@@ -58,9 +59,10 @@ public class Board {
         final Tile firstTileNext = getTileIfExists(firstCoordinateNext);
         if (firstTileNext != null && firstTileNext.isWalkable()) {
             final Coordinate secondCoordinateNext = Coordinate.add(firstCoordinateNext, coordinateVectorMap.get(direction));
+            final Tile secondTileNext = getTileIfExists(secondCoordinateNext);
             if (!coordinateContainsBox(firstCoordinateNext, state)) {
                 return firstCoordinateNext;
-            } else if (getTileIfExists(secondCoordinateNext) != null && !coordinateContainsBox(secondCoordinateNext, state)) {
+            } else if (secondTileNext != null && secondTileNext.isWalkable() && !coordinateContainsBox(secondCoordinateNext, state)) {
                 return firstCoordinateNext;
             }
         }
@@ -118,13 +120,14 @@ public class Board {
      * @return
      */
     public boolean gameHasEnded(final State state) {
-        return state.getBoxes()
-                .parallelStream()
-                .map(box -> {
-                    final Tile boxTile = getTileIfExists(box.getCoordinate());
-                    return boxTile != null && boxTile.isFinalTile();
-                })
-                .reduce(true, (acum, current) -> acum && current);
+        Box box = new Box("", new Coordinate(0, 0));
+        for(Coordinate coordinate : finishCoordinates){
+            box.setCoordinate(coordinate);
+            if(!state.getBoxes().contains(box)){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
