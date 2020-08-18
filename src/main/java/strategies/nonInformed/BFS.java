@@ -24,7 +24,7 @@ public class BFS extends SearchStrategy {
         final List<Direction> directionsToMovePusher = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
         for (Direction direction : directionsToMovePusher) {
             Node newNode = Node.generateNewNode(direction, currentNode);
-            if(!visited.contains(newNode.getState())) {
+            if(!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
                 queue.add(newNode);
             }
         }

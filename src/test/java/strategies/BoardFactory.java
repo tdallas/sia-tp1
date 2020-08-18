@@ -46,7 +46,18 @@ public class BoardFactory {
                                 "X @XX\n" +
                                 "XXXXXX";
 
-    public static enum Level {EASY, MEDIUM, HARD2, HARD, TEST}
+    final static String hard3 = "XXXXXXXXXXXX\n" +
+                                "X..  X     XXX\n" +
+                                "X..  X *  *  X\n" +
+                                "X..  X*XXXX  X\n" +
+                                "X..    @ XX  X\n" +
+                                "X..  X X  * XX\n" +
+                                "XXXXXX XX* * X\n" +
+                                "  X *  * * * X\n" +
+                                "  X    X     X\n" +
+                                "  XXXXXXXXXXXX";
+
+    public static enum Level {EASY, MEDIUM, HARD2, HARD, TEST, HARD3}
 
     @AllArgsConstructor
     private static class BoardGame {
@@ -76,6 +87,8 @@ public class BoardFactory {
                 return generateLevel(hard2);
             case HARD:
                 return generateLevel(hard);
+            case HARD3:
+                return generateLevel(hard3);
             case TEST:
                 return generateLevel(test);
         }

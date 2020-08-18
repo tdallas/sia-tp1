@@ -42,7 +42,7 @@ public class IDDFS extends SearchStrategy {
     }
 
     private Node findSolutionUsingIDDFS(final Node currentNode, int depth) {
-        if (depth == 0 || visited.contains(currentNode.getState())){
+        if (depth == 0){
             return null;
         }
         if (getBoard().gameHasEnded(currentNode.getState())) {
@@ -51,9 +51,11 @@ public class IDDFS extends SearchStrategy {
         visited.add(currentNode.getState());
         for (Direction direction : getBoard().getPusherPossibleDirectionsToMove(currentNode.getState())) {
             final Node newNode = Node.generateNewNode(direction, currentNode);
-            final Node possibleEndNode = findSolutionUsingIDDFS(newNode, depth - 1);
-            if (possibleEndNode != null) {
-                return possibleEndNode;
+            if(!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
+                final Node possibleEndNode = findSolutionUsingIDDFS(newNode, depth - 1);
+                if (possibleEndNode != null) {
+                    return possibleEndNode;
+                }
             }
         }
         return null;

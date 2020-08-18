@@ -28,7 +28,7 @@ public class Board {
     }};
 
     /**
-     * Returns the Tile on the given coordinate, or null if the coordinate is invalid
+     * Returns the Tile on the given coordinate or a RockTile with the given coordinate
      *
      * @param coordinate
      * @return
@@ -37,13 +37,12 @@ public class Board {
         if(emptyCoordinates.contains(coordinate)){
             return new EmptyTile(coordinate);
         }
-        else if(rockCoordinates.contains(coordinate)){
-            return new RockTile(coordinate);
-        }
         else if(finishCoordinates.contains(coordinate)){
             return new FinishTile(coordinate);
         }
-        return null;
+        else {
+            return new RockTile(coordinate);
+        }
     }
 
     /**
@@ -115,6 +114,77 @@ public class Board {
      * @return
      */
     public boolean isDeadlock(final State state) {
+        Tile center, up, down, left, right, upLeft, upRight, downLeft, downRight, downDown, upUp, rightRight, leftLeft;
+        for(Coordinate box : state.getBoxes()){
+            center = getTileIfExists(box);
+            int xCoordinate = box.getX();
+            int yCoordinate = box.getY();
+            if(!center.isFinalTile()){
+                up = getTileIfExists(new Coordinate(xCoordinate - 1, yCoordinate));
+                down = getTileIfExists(new Coordinate(xCoordinate + 1, yCoordinate));
+                left = getTileIfExists(new Coordinate(xCoordinate, yCoordinate - 1));
+                right = getTileIfExists(new Coordinate(xCoordinate, yCoordinate + 1));
+
+                if(!up.isWalkable() && !left.isWalkable()){
+                    return true;
+                }
+                if(!up.isWalkable() && !right.isWalkable()){
+                    return true;
+                }
+                if(!down.isWalkable() && !right.isWalkable()){
+                    return true;
+                }
+                if(!down.isWalkable() && !left.isWalkable()){
+                    return true;
+                }
+
+                upLeft = getTileIfExists(new Coordinate(xCoordinate - 1, yCoordinate - 1));
+                upRight = getTileIfExists(new Coordinate(xCoordinate - 1, yCoordinate + 1));
+                downLeft = getTileIfExists(new Coordinate(xCoordinate + 1, yCoordinate - 1));
+                downRight = getTileIfExists(new Coordinate(xCoordinate + 1, yCoordinate + 1));
+                upUp = getTileIfExists(new Coordinate(xCoordinate - 2, yCoordinate));
+                downDown = getTileIfExists(new Coordinate(xCoordinate + 2, yCoordinate));
+                leftLeft = getTileIfExists(new Coordinate(xCoordinate, yCoordinate - 2));
+                rightRight = getTileIfExists(new Coordinate(xCoordinate, yCoordinate + 2));
+
+                if (!upLeft.isWalkable() &&
+                        !up.isWalkable() &&
+                        !upRight.isWalkable() &&
+                        !leftLeft.isWalkable() &&
+                        !rightRight.isWalkable() &&
+                        !left.isFinalTile() &&
+                        !right.isFinalTile()) {
+                    return true;  //top & sides
+                }
+                if (!downLeft.isWalkable() &&
+                        !down.isWalkable() &&
+                        !downRight.isWalkable() &&
+                        !leftLeft.isWalkable() &&
+                        !rightRight.isWalkable() &&
+                        !left.isFinalTile() &&
+                        !right.isFinalTile()) {
+                    return true; //bottom & sides
+                }
+                if (!upLeft.isWalkable() &&
+                        !left.isWalkable() &&
+                        !downLeft.isWalkable() &&
+                        !upUp.isWalkable() &&
+                        !downDown.isWalkable() &&
+                        !up.isFinalTile() &&
+                        !down.isFinalTile()) {
+                    return true; //left & vertical
+                }
+                if (!upRight.isWalkable() &&
+                        !right.isWalkable() &&
+                        !downRight.isWalkable() &&
+                        !upUp.isWalkable() &&
+                        !downDown.isWalkable() &&
+                        !up.isFinalTile() &&
+                        !down.isFinalTile()) {
+                    return true; //right & top/bottom
+                }
+            }
+        }
         return false;
     }
 }

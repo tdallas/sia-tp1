@@ -43,7 +43,9 @@ public class DFS extends SearchStrategy {
                         System.out.println(result);
                         return result;
                     }
-                    stack.push(possibleEndNode);
+                    if(!visited.contains(possibleEndNode.getState()) && !getBoard().isDeadlock(possibleEndNode.getState())) {
+                        stack.push(possibleEndNode);
+                    }
                 }
                 visited.add(currentNode.getState());
             }
