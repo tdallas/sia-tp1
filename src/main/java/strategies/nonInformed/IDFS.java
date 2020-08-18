@@ -49,7 +49,7 @@ public class IDFS extends SearchStrategy {
         }
         visited.add(currentNode.getState());
         for (Direction direction : board.getPusherPossibleDirectionsToMove(currentNode.getState())) {
-            final Node newNode = Node.generateNewNode(direction, currentNode, board);
+            final Node newNode = Node.generateNewNode(direction, currentNode);
             final Node possibleEndNode = findSolutionUsingIDFS(newNode, depth - 1);
             if (possibleEndNode != null) {
                 return possibleEndNode;

@@ -3,12 +3,10 @@ package strategies.nonInformed;
 import game.Board;
 import game.State;
 import strategies.utils.Path;
-import game.Pusher;
 import lombok.Getter;
 import game.Direction;
 import strategies.SearchStrategy;
 import strategies.utils.Node;
-import strategies.utils.Step;
 
 import java.util.*;
 
@@ -37,7 +35,7 @@ public class DFS extends SearchStrategy {
             if (!visited.contains(currentNode.getState())) {
                 List<Direction> directionsToMove = board.getPusherPossibleDirectionsToMove(currentNode.getState());
                 for (Direction direction : directionsToMove) {
-                    final Node possibleEndNode = Node.generateNewNode(direction, currentNode, board);
+                    final Node possibleEndNode = Node.generateNewNode(direction, currentNode);
                     if (board.gameHasEnded(possibleEndNode.getState())) {
                         currentNode = possibleEndNode;
                         setFinishTime(System.currentTimeMillis());

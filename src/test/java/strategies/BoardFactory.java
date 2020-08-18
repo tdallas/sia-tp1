@@ -1,16 +1,9 @@
 package strategies;
 
 import game.*;
-import game.tiles.EmptyTile;
-import game.tiles.FinishTile;
-import game.tiles.RockTile;
-import game.tiles.Tile;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class BoardFactory {
@@ -90,16 +83,14 @@ public class BoardFactory {
     }
 
     private static BoardGame generateLevel(final String level) {
-        Set<Box> boxes = new HashSet<>();
+        Set<Coordinate> boxes = new HashSet<>();
         Set<Coordinate> finishTiles = new HashSet<>();
         Set<Coordinate> rockTiles = new HashSet<>();
         Set<Coordinate> emptyTiles = new HashSet<>();
-        Pusher pusher = new Pusher();
-        State state = new State(pusher, boxes);
+        Coordinate pusher = null;
         boolean newLine = true;
         int colCount = 0;
         int rowCount = 0;
-        int boxCount = 0;
         for (int i = 0; i < level.length(); i++) {
             if (newLine) {
                 colCount = 0;
@@ -118,11 +109,11 @@ public class BoardFactory {
                     break;
                 case '*':
                     emptyTiles.add(new Coordinate(rowCount, colCount));
-                    boxes.add(new Box("Box" + boxCount++, new Coordinate(rowCount, colCount++)));
+                    boxes.add(new Coordinate(rowCount, colCount++));
                     break;
                 case '@':
                     emptyTiles.add(new Coordinate(rowCount, colCount));
-                    pusher.setCoordinate(new Coordinate(rowCount, colCount++));
+                    pusher = new Coordinate(rowCount, colCount++);
                     break;
                 case '\n':
                     newLine = true;
@@ -133,6 +124,7 @@ public class BoardFactory {
             }
 
         }
+        State state = new State(pusher, boxes);
         return new BoardGame(finishTiles, rockTiles, emptyTiles, state);
     }
 }

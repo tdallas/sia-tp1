@@ -54,7 +54,7 @@ public class AStar extends SearchStrategy {
     private void simulateMovesAndAddToQueue(final Node currentNode) {
         final List<Direction> directionsToMovePusher = board.getPusherPossibleDirectionsToMove(currentNode.getState());
         for (Direction direction : directionsToMovePusher) {
-            Node newNode = Node.generateNewNode(direction, currentNode, board);
+            Node newNode = Node.generateNewNode(direction, currentNode);
             if(!visited.contains(newNode.getState())) {
                 priorityQueue.add(newNode);
             }

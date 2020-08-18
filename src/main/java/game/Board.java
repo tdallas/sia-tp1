@@ -6,7 +6,6 @@ import game.tiles.RockTile;
 import game.tiles.Tile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import strategies.utils.Step;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,19 +49,18 @@ public class Board {
     /**
      * Returns coordinate to move if it exists and if walkable, otherwise null
      *
-     * @param fromCoordinate
      * @param direction
      * @return
      */
-    protected Coordinate getPusherCoordinateToMoveTo(final Coordinate fromCoordinate, final Direction direction, final State state) {
-        final Coordinate firstCoordinateNext = Coordinate.add(fromCoordinate, coordinateVectorMap.get(direction));
+    protected Coordinate getPusherCoordinateToMoveTo(final Direction direction, final State state) {
+        final Coordinate firstCoordinateNext = Coordinate.add(state.getPusher(), coordinateVectorMap.get(direction));
         final Tile firstTileNext = getTileIfExists(firstCoordinateNext);
         if (firstTileNext != null && firstTileNext.isWalkable()) {
             final Coordinate secondCoordinateNext = Coordinate.add(firstCoordinateNext, coordinateVectorMap.get(direction));
             final Tile secondTileNext = getTileIfExists(secondCoordinateNext);
-            if (!coordinateContainsBox(firstCoordinateNext, state)) {
+            if (!stateContainsBox(firstCoordinateNext, state)) {
                 return firstCoordinateNext;
-            } else if (secondTileNext != null && secondTileNext.isWalkable() && !coordinateContainsBox(secondCoordinateNext, state)) {
+            } else if (secondTileNext != null && secondTileNext.isWalkable() && !stateContainsBox(secondCoordinateNext, state)) {
                 return firstCoordinateNext;
             }
         }
@@ -79,8 +77,9 @@ public class Board {
         return coordinateVectorMap
                 .keySet()
                 .parallelStream()
-                .filter(direction -> getPusherCoordinateToMoveTo(state.getPusher().getCoordinate(), direction, state) != null)
+                .filter(direction -> getPusherCoordinateToMoveTo(direction, state) != null)
                 .collect(Collectors.toList());
+
     }
 
     /**
@@ -90,27 +89,8 @@ public class Board {
      * @param state
      * @return
      */
-    public boolean coordinateContainsBox(final Coordinate coordinate, final State state) {
-        return state.getBoxes()
-                .parallelStream()
-                .map(Box::getCoordinate)
-                .anyMatch(c -> c.equals(coordinate));
-    }
-
-    /**
-     * Returns the box in the coordinate or null if there is no box on that coordinate
-     *
-     * @param coordinate
-     * @param state
-     * @return
-     */
-    public Box getBoxInCoordinate(final Coordinate coordinate, final State state) {
-        List<Box> boxToReturn = state.getBoxes()
-                .parallelStream()
-                .filter(box -> box.getCoordinate().equals(coordinate))
-                .collect(Collectors.toList());
-        if (boxToReturn.size() == 0) return null;
-        return boxToReturn.get(0);
+    public boolean stateContainsBox(final Coordinate coordinate, final State state) {
+        return state.getBoxes().contains(coordinate);
     }
 
     /**
@@ -120,10 +100,8 @@ public class Board {
      * @return
      */
     public boolean gameHasEnded(final State state) {
-        Box box = new Box("", new Coordinate(0, 0));
         for(Coordinate coordinate : finishCoordinates){
-            box.setCoordinate(coordinate);
-            if(!state.getBoxes().contains(box)){
+            if(!state.getBoxes().contains(coordinate)){
                 return false;
             }
         }
@@ -137,41 +115,6 @@ public class Board {
      * @return
      */
     public boolean isDeadlock(final State state) {
-//        for (Box box : state.getBoxes()) {
-//            int row = box.row;
-//            int col = box.col;
-//            if (!setContains(goals, row, col)) {
-//                if (setContains(walls, row-1, col)&&setContains(walls, row, col-1))
-//                    return true; //top & left
-//                if (setContains(walls, row-1, col)&&setContains(walls, row, col+1))
-//                    return true; //top & right
-//                if (setContains(walls, row+1, col)&&setContains(walls, row, col-1))
-//                    return true; //bottom & left
-//                if (setContains(walls, row+1, col)&&setContains(walls, row, col+1))
-//                    return true; //bottom & right
-//
-//                if (setContains(walls, row-1, col-1)&&setContains(walls, row-1, col)&&
-//                        setContains(walls, row-1, col+1)&&setContains(walls, row, col-2)&&
-//                        setContains(walls, row, col+2)&&(!setContains(goals, row, col-1))&&
-//                        !setContains(goals, row, col+1))
-//                    return true; //top & sides
-//                if (setContains(walls, row+1, col-1)&&setContains(walls, row+1, col)&&
-//                        setContains(walls, row+1, col+1)&&setContains(walls, row, col-2)&&
-//                        setContains(walls, row, col+2)&&(!setContains(goals, row, col-1))&&
-//                        (!setContains(goals, row, col+1)))
-//                    return true; //bottom & sides
-//                if (setContains(walls, row-1, col-1)&&setContains(walls, row, col-1)&&
-//                        setContains(walls, row+1, col-1)&&setContains(walls, row-2, col)&&
-//                        setContains(walls, row+2, col)&&(!setContains(goals, row-1, col))&&
-//                        (!setContains(goals, row+1, col)))
-//                    return true; //left & vertical
-//                if (setContains(walls, row-1, col+1)&&setContains(walls, row, col+1)&&
-//                        setContains(walls, row+1, col+1)&&setContains(walls, row-2, col)&&
-//                        setContains(walls, row+2, col)&&(!setContains(goals, row-1, col))&&
-//                        (!setContains(goals, row+1, col)))
-//                    return true; //right & top/bottom
-//            }
-//        }
         return false;
     }
 }

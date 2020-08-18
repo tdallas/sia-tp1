@@ -1,12 +1,11 @@
 package strategies.heuristics.trivials;
 
-import game.Box;
 import game.Coordinate;
 import game.State;
 import strategies.heuristics.Heuristic;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Euclidean extends Heuristic {
 
@@ -16,9 +15,9 @@ public class Euclidean extends Heuristic {
 
     @Override
     public double evaluate(State currentState) {
-        Set<Coordinate> boxCoordinatesSet = currentState.getBoxes().stream().map(Box::getCoordinate).collect(Collectors.toSet());
+        Set<Coordinate> boxCoordinatesSet = new HashSet<>(currentState.getBoxes());
         // Initialize sumValue to manhattan distance from player to closest box
-        double sumValue = calculateMinDistance(currentState.getPusher().getCoordinate(), boxCoordinatesSet);
+        double sumValue = calculateMinDistance(currentState.getPusher(), boxCoordinatesSet);
 
         for (Coordinate boxCoordinate : boxCoordinatesSet) {
             sumValue += calculateMinDistance(boxCoordinate, getFinishTiles());
