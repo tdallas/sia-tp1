@@ -58,9 +58,9 @@ public class Board {
         if (firstTileNext != null && firstTileNext.isWalkable()) {
             final Coordinate secondCoordinateNext = Coordinate.add(firstCoordinateNext, coordinateVectorMap.get(direction));
             final Tile secondTileNext = getTileIfExists(secondCoordinateNext);
-            if (!stateContainsBox(firstCoordinateNext, state)) {
+            if (!stateContainsBoxAt(firstCoordinateNext, state)) {
                 return firstCoordinateNext;
-            } else if (secondTileNext != null && secondTileNext.isWalkable() && !stateContainsBox(secondCoordinateNext, state)) {
+            } else if (secondTileNext != null && secondTileNext.isWalkable() && !stateContainsBoxAt(secondCoordinateNext, state)) {
                 return firstCoordinateNext;
             }
         }
@@ -89,7 +89,7 @@ public class Board {
      * @param state
      * @return
      */
-    public boolean stateContainsBox(final Coordinate coordinate, final State state) {
+    public boolean stateContainsBoxAt(final Coordinate coordinate, final State state) {
         return state.getBoxes().contains(coordinate);
     }
 

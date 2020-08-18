@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import strategies.BoardFactory;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -89,12 +88,12 @@ public class BoardTest {
 
     @Test
     public void shouldReturnTrueIfCoordinateContainsBoxTest() {
-        assertTrue(currentBoard.stateContainsBox(new Coordinate(2,1), currentBoard.getInitialState()));
+        assertTrue(currentBoard.stateContainsBoxAt(new Coordinate(2,1), currentBoard.getInitialState()));
     }
 
     @Test
     public void shouldReturnFalseIfCoordinateDoesNotContainsBoxTest() {
-        assertFalse(currentBoard.stateContainsBox(new Coordinate(2,4), currentBoard.getInitialState()));
+        assertFalse(currentBoard.stateContainsBoxAt(new Coordinate(2,4), currentBoard.getInitialState()));
     }
 
     @Test
