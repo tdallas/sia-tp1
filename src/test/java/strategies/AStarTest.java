@@ -2,6 +2,7 @@ package strategies;
 
 import game.Board;
 import org.junit.Test;
+import strategies.heuristics.nonTrivials.GlobalMinManhattan;
 import strategies.heuristics.trivials.Euclidean;
 import strategies.heuristics.trivials.Manhattan;
 import strategies.informed.AStar;
@@ -12,7 +13,6 @@ import java.util.HashSet;
 import static org.junit.Assert.assertNotNull;
 
 public class AStarTest {
-
     @Test
     public void mediumSolutionWithManhattan() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
@@ -25,6 +25,14 @@ public class AStarTest {
     public void mediumSolutionWithEuclidean() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
         AStar aStar = new AStar(board, new Euclidean(new HashSet<>(board.getFinishCoordinates())));
+        Path finalPath = aStar.findSolution();
+        assertNotNull(finalPath);
+    }
+
+    @Test
+    public void mediumSolutionWithGlobalMinManhattan() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
+        AStar aStar = new AStar(board, new GlobalMinManhattan(board.getFinishCoordinates()));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
     }
@@ -46,8 +54,16 @@ public class AStarTest {
     }
 
     @Test
+    public void hardSolutionWithGlobalMinManhattan() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+        AStar aStar = new AStar(board, new GlobalMinManhattan(board.getFinishCoordinates()));
+        Path finalPath = aStar.findSolution();
+        assertNotNull(finalPath);
+    }
+
+    @Test
     public void hard2SolutionWithManhattan() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
         AStar aStar = new AStar(board, new Manhattan(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
@@ -55,17 +71,18 @@ public class AStarTest {
 
     @Test
     public void hard2SolutionWithEuclidean() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
         AStar aStar = new AStar(board, new Euclidean(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void easySolutionWithEuclidean() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.EASY);
-        AStar aStar = new AStar(board, new Euclidean(new HashSet<>(board.getFinishCoordinates())));
+    public void hard2SolutionWithGlobalMinManhattan() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+        AStar aStar = new AStar(board, new GlobalMinManhattan(board.getFinishCoordinates()));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
     }
+
 }
