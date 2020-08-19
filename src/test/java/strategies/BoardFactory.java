@@ -46,16 +46,24 @@ public class BoardFactory {
                                 "X @XX\n" +
                                 "XXXXXX";
 
-    final static String hard3 = "XXXXXXXXXXXX\n" +
-                                "X..  X     XXX\n" +
-                                "X..  X *  *  X\n" +
-                                "X..  X*XXXX  X\n" +
-                                "X..    @ XX  X\n" +
-                                "X..  X X  * XX\n" +
-                                "XXXXXX XX* * X\n" +
-                                "  X *  * * * X\n" +
-                                "  X    X     X\n" +
-                                "  XXXXXXXXXXXX";
+    final static String hard3 = "XXXXXXX\n" +
+            "          X  ...X\n" +
+            "      XXXXX  ...X\n" +
+            "      X      ...X\n" +
+            "      X  XX  ...X\n" +
+            "      XX XX  ...X\n" +
+            "     XXX XXXXXXXX\n" +
+            "     X *** XX    \n" +
+            " XXXXX  * * XXXXX\n" +
+            "XX   X* *   X   X\n" +
+            "X@ *  *    *  * X\n" +
+            "XXXXXX ** * XXXXX\n" +
+            "     X *    X    \n" +
+            "     XXXX XXX    \n" +
+            "        X  X     \n" +
+            "        X  X     \n" +
+            "        X  X     \n" +
+            "        XXXX  ";
 
     public static enum Level {EASY, MEDIUM, HARD2, HARD, TEST, HARD3}
 

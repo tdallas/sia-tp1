@@ -14,11 +14,10 @@ public class Euclidean extends Heuristic {
 
     @Override
     public double evaluate(State currentState) {
-        Set<Coordinate> boxCoordinatesSet = currentState.getBoxes();
-        // Initialize sumValue to manhattan distance from player to closest box
-        double sumValue = calculateMinDistance(currentState.getPusher(), boxCoordinatesSet);
 
-        for (Coordinate boxCoordinate : boxCoordinatesSet) {
+        double sumValue = calculateMinDistance(currentState.getPusher(), currentState.getBoxes());
+
+        for (Coordinate boxCoordinate : currentState.getBoxes()) {
             sumValue += calculateMinDistance(boxCoordinate, getFinishTiles());
         }
 
@@ -27,12 +26,12 @@ public class Euclidean extends Heuristic {
 
     @Override
     protected double calculateMinDistance(Coordinate current, Set<Coordinate> coordinateSet) {
-        double minDistance = Double.MAX_VALUE;
+        double minDistance = Double.MAX_VALUE, currentDistance;
 
         for (Coordinate coordinate : coordinateSet) {
-            double currentManhattanDistance = euclideanDistance(current, coordinate);
-            if (currentManhattanDistance < minDistance) {
-                minDistance = currentManhattanDistance;
+            currentDistance = euclideanDistance(current, coordinate);
+            if (currentDistance < minDistance) {
+                minDistance = currentDistance;
             }
         }
 
@@ -40,6 +39,6 @@ public class Euclidean extends Heuristic {
     }
 
     private double euclideanDistance(final Coordinate from, final Coordinate to) {
-        return Math.sqrt(Math.pow(from.getX() - to.getX(), 2) + Math.pow(from.getY() - to.getY(), 2));
+        return Math.hypot(from.getX() - to.getX(), from.getY() - to.getY());
     }
 }
