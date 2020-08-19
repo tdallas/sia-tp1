@@ -22,6 +22,7 @@ public class AStarTest {
         Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
         AStar aStar = new AStar(board, new Manhattan(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = aStar.findSolution();
+        System.out.println(finalPath);
         assertNotNull(finalPath);
     }
 
@@ -116,7 +117,7 @@ public class AStarTest {
 
     @Test
     public void hardSolutionWithManhattanCheckingHalf() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         AStar aStar = new AStar(board, new ManhattanCheckingHalf(board.getFinishCoordinates()));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
