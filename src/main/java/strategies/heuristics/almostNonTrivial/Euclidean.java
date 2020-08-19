@@ -1,4 +1,4 @@
-package strategies.heuristics.trivials;
+package strategies.heuristics.almostNonTrivial;
 
 import game.Coordinate;
 import game.State;
@@ -6,9 +6,9 @@ import strategies.heuristics.Heuristic;
 
 import java.util.Set;
 
-public class Manhattan extends Heuristic {
+public class Euclidean extends Heuristic {
 
-    public Manhattan(final Set<Coordinate> finishTiles) {
+    public Euclidean(final Set<Coordinate> finishTiles) {
         super(finishTiles);
     }
 
@@ -29,7 +29,7 @@ public class Manhattan extends Heuristic {
         double minDistance = Double.MAX_VALUE, currentDistance;
 
         for (Coordinate coordinate : coordinateSet) {
-            currentDistance = manhattanDistance(current, coordinate);
+            currentDistance = euclideanDistance(current, coordinate);
             if (currentDistance < minDistance) {
                 minDistance = currentDistance;
             }
@@ -38,7 +38,7 @@ public class Manhattan extends Heuristic {
         return minDistance;
     }
 
-    private double manhattanDistance(final Coordinate from, final Coordinate to) {
-        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+    private double euclideanDistance(final Coordinate from, final Coordinate to) {
+        return Math.hypot(from.getX() - to.getX(), from.getY() - to.getY());
     }
 }
