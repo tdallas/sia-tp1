@@ -14,8 +14,10 @@ public class IDAStar extends SearchStrategy {
 
     // initialize to default heuristic
     private final Stack<Node> stack;
-    private final Set<State> visited;
+    private Set<State> visited;
     private final Heuristic heuristic;
+    private List<Double> limits = new ArrayList<>();
+    private Double currentMinValue = Double.MAX_VALUE;
 
     public IDAStar(final Board board, final Heuristic heuristic) {
         super(board);
@@ -27,46 +29,69 @@ public class IDAStar extends SearchStrategy {
     @Override
     public Path findSolution() {
         setStartTime(System.currentTimeMillis());
-        Node currentNode = new Node(null, getBoard().getInitialState(), null, 0);
-        stack.push(currentNode);
-        Node endNode = findRecursiveSolution(stack, 0, 8, null);
-        setFinishTime(System.currentTimeMillis());
-        return new Path(endNode);
+        Node initialNode = new Node(null, getBoard().getInitialState(), null, 0);
+        double initialLimit = heuristic.evaluate(initialNode.getState());
+        limits.add(initialLimit);
+        while (true) {
+            stack.push(initialNode);
+            Node endNode = findRecursiveSolution(stack, 0, limits.get(limits.size() - 1));
+            visited = new HashSet<>();
+            limits.add(currentMinValue);
+            currentMinValue = Double.MAX_VALUE;
+            if (endNode != null && getBoard().gameHasEnded(endNode.getState())) {
+                return new Path(endNode);
+            }
+        }
     }
 
-    private Node findRecursiveSolution(Stack<Node> stack, double nodeCost, double bound, Node endNode) {
+    private Node findRecursiveSolution(Stack<Node> stack, double nodeCost, double bound) {
         if (stack.isEmpty()) {
-            return endNode;
+            return null;
         }
         Node currentNode = stack.pop();
         visited.add(currentNode.getState());
-        double currentFValue = nodeCost + heuristic.evaluate(currentNode.getState());
+        double currentFValue = currentNode.getCost() + heuristic.evaluate(currentNode.getState());
+
+        if (currentFValue < currentMinValue) {
+            if (!limits.contains(currentFValue)) {
+                currentMinValue = currentFValue;
+            }
+        }
+
         if (currentFValue > bound) {
-            return endNode;
+            return null;
         }
         if (getBoard().gameHasEnded(currentNode.getState())) {
             return currentNode;
         }
-        Node currentEndNode = endNode;
         final List<Direction> directionsToMovePusher = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
+
+        PriorityQueue<Node> currentPQ = new PriorityQueue<>((firstNode, secondNode) ->
+                (int) ((firstNode.getCost() + heuristic.evaluate(firstNode.getState())) -
+                        (secondNode.getCost()) + heuristic.evaluate(secondNode.getState())));
         for (Direction direction : directionsToMovePusher) {
             Node newNode = Node.generateNewNode(direction, currentNode);
-            if (!visited.contains(newNode.getState())) {
-                if (!getBoard().isDeadlock(newNode.getState())) {
-                    stack.push(newNode);
-                    double threshold = currentEndNode == null ? bound : Math.max(heuristic.evaluate(currentEndNode.getState()), bound);
-                    Node possibleEndNode = findRecursiveSolution(stack, nodeCost + 1,
-                            threshold, currentEndNode);
-                    if (possibleEndNode != null && getBoard().gameHasEnded(possibleEndNode.getState()) && (endNode == null || threshold > heuristic.evaluate(possibleEndNode.getState()))) {
-                    //    System.out.println("cambio");
-                        System.out.print(heuristic.evaluate((possibleEndNode.getState())) + " " );
-                        System.out.println(new Path(possibleEndNode));
-                        currentEndNode = possibleEndNode;
+            currentPQ.add(newNode);
+        }
+
+        while (!currentPQ.isEmpty()) {
+            Node leastWeightNode = currentPQ.poll();
+            if (leastWeightNode != null && !visited.contains(leastWeightNode.getState())) {
+                if (!getBoard().isDeadlock(leastWeightNode.getState())) {
+                    stack.push(leastWeightNode);
+                    double possibleNewBound = heuristic.evaluate(leastWeightNode.getState()) + leastWeightNode.getCost();
+                    if (!limits.contains(possibleNewBound) && possibleNewBound < currentMinValue) {
+                        currentMinValue = possibleNewBound;
+                    }
+                    Node possibleEndNode = findRecursiveSolution(stack, nodeCost + 1, bound);
+                    if (possibleEndNode != null && getBoard().gameHasEnded(possibleEndNode.getState())) {
+                        return possibleEndNode;
                     }
                 }
             }
         }
-        return currentEndNode;
+
+        return null;
     }
 
     private void simulateMovesAndAddToQueue(final Node currentNode) {
