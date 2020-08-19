@@ -32,11 +32,7 @@ public class IDDFS extends SearchStrategy {
         }
         setFinishTime(System.currentTimeMillis());
         if(currentNode != null) {
-            System.out.println("Final depth=" + depth);
-            System.out.println("Time spent solving=" + getSolveTime());
-            Path result = new Path(currentNode);
-            System.out.println(result);
-            return result;
+            return new Path(currentNode);
         }
         return null;
     }
@@ -50,12 +46,15 @@ public class IDDFS extends SearchStrategy {
         }
         visited.add(currentNode.getState());
         for (Direction direction : getBoard().getPusherPossibleDirectionsToMove(currentNode.getState())) {
+            expandedNodes++;
             final Node newNode = Node.generateNewNode(direction, currentNode);
             if(!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
                 final Node possibleEndNode = findSolutionUsingIDDFS(newNode, depth - 1);
                 if (possibleEndNode != null) {
                     return possibleEndNode;
                 }
+            }else{
+                borderNodes++;
             }
         }
         return null;

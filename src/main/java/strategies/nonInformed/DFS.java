@@ -34,17 +34,17 @@ public class DFS extends SearchStrategy {
             if (!visited.contains(currentNode.getState())) {
                 List<Direction> directionsToMove = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
                 for (Direction direction : directionsToMove) {
+                    expandedNodes++;
                     final Node possibleEndNode = Node.generateNewNode(direction, currentNode);
                     if (getBoard().gameHasEnded(possibleEndNode.getState())) {
                         currentNode = possibleEndNode;
                         setFinishTime(System.currentTimeMillis());
-                        System.out.println("Time spent solving=" + getSolveTime());
-                        Path result = new Path(currentNode);
-                        System.out.println(result);
-                        return result;
+                        return new Path(currentNode);
                     }
                     if(!visited.contains(possibleEndNode.getState()) && !getBoard().isDeadlock(possibleEndNode.getState())) {
                         stack.push(possibleEndNode);
+                    }else{
+                        borderNodes++;
                     }
                 }
                 visited.add(currentNode.getState());

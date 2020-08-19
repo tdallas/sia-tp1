@@ -1,6 +1,7 @@
 package strategies;
 
 import game.Board;
+import game.BoardFactory;
 import org.junit.Test;
 import strategies.nonInformed.IDDFS;
 import strategies.utils.Path;
@@ -33,8 +34,8 @@ public class IDDFSTest {
     }
 
     @Test
-    public void resolvingHardLevelUsingIDDFS() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void resolvingHard1LevelUsingIDDFS() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         IDDFS IDDFS = new IDDFS(board, 1000);
         Path finalPath = IDDFS.findSolution();
         assertNotNull(finalPath);

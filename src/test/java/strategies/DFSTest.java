@@ -1,6 +1,7 @@
 package strategies;
 
 import game.Board;
+import game.BoardFactory;
 import org.junit.Test;
 import strategies.nonInformed.DFS;
 import strategies.utils.Path;
@@ -33,8 +34,8 @@ public class DFSTest {
     }
 
     @Test
-    public void resolvingHardLevelUsingDFS() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void resolvingHard1LevelUsingDFS() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         DFS dfs = new DFS(board);
         Path finalPath = dfs.findSolution();
         assertNotNull(finalPath);

@@ -1,6 +1,7 @@
 package strategies;
 
 import game.Board;
+import game.BoardFactory;
 import org.junit.Test;
 import strategies.heuristics.nonTrivials.GlobalMinEuclidean;
 import strategies.heuristics.nonTrivials.GlobalMinManhattan;
@@ -41,32 +42,32 @@ public class AStarTest {
     }
 
     @Test
-    public void hardSolutionWithManhattan() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionWithManhattan() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         AStar aStar = new AStar(board, new Manhattan(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void hardSolutionWithEuclidean() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionWithEuclidean() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         AStar aStar = new AStar(board, new Euclidean(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void hardSolutionWithGlobalMinManhattan() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionWithGlobalMinManhattan() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         AStar aStar = new AStar(board, new GlobalMinManhattan(board.getFinishCoordinates()));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void hardSolutionWithGlobalMinEuclidean() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionWithGlobalMinEuclidean() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         AStar aStar = new AStar(board, new GlobalMinEuclidean(board.getFinishCoordinates()));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);

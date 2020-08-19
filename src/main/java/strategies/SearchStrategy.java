@@ -14,11 +14,17 @@ import strategies.utils.Path;
 public abstract class SearchStrategy {
 
     private final Board board;
-    private long startTime = 0;
-    private long finishTime = 0;
+    protected long expandedNodes;
+    protected long borderNodes;
+    private long startTime;
+    private long finishTime;
 
     public SearchStrategy(final Board board){
         this.board = board;
+        this.startTime = 0;
+        this.finishTime = 0;
+        this.expandedNodes = 0;
+        this.borderNodes = 0;
     }
 
     /**

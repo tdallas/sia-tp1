@@ -2,7 +2,6 @@ package game;
 
 import org.junit.Before;
 import org.junit.Test;
-import strategies.BoardFactory;
 
 import java.util.List;
 
@@ -21,21 +20,6 @@ public class BoardTest {
     @Test
     public void getExistentTileTest() {
         assertNotNull(currentBoard.getTileIfExists(new Coordinate(3, 3)));
-    }
-
-    @Test
-    public void getNonExistentTileTest() {
-        assertNull(currentBoard.getTileIfExists(new Coordinate(10, 10)));
-    }
-
-    @Test
-    public void getNonExistentTileOverXTest() {
-        assertNull(currentBoard.getTileIfExists(new Coordinate(10, 3)));
-    }
-
-    @Test
-    public void getNonExistentTileOverYTest() {
-        assertNull(currentBoard.getTileIfExists(new Coordinate(3, 10)));
     }
 
     @Test

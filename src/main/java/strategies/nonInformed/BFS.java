@@ -21,11 +21,14 @@ public class BFS extends SearchStrategy {
     }
 
     private void simulateMovesAndAddToQueue(final Node currentNode) {
+        expandedNodes++;
         final List<Direction> directionsToMovePusher = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
         for (Direction direction : directionsToMovePusher) {
             Node newNode = Node.generateNewNode(direction, currentNode);
             if(!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
                 queue.add(newNode);
+            }else{
+                borderNodes++;
             }
         }
     }
@@ -42,10 +45,7 @@ public class BFS extends SearchStrategy {
                     simulateMovesAndAddToQueue(currentNode);
                 } else {
                     setFinishTime(System.currentTimeMillis());
-                    System.out.println("Time spent solving=" + getSolveTime());
-                    Path result = new Path(currentNode);
-                    System.out.println(result);
-                    return result;
+                    return new Path(currentNode);
                 }
             }
             visited.add(currentNode.getState());
