@@ -54,11 +54,11 @@ public class Main {
             }
             if(board != null) {
                 if(searchStrategy != null) {
-                    if (searchStrategy.equals("bfs")) {
+                    if (searchStrategy.equalsIgnoreCase ("bfs")) {
                         callStrategy(new BFS(board), searchStrategy, null, -1);
-                    } else if (searchStrategy.equals("dfs")) {
+                    } else if (searchStrategy.equalsIgnoreCase ("dfs")) {
                         callStrategy(new DFS(board), searchStrategy, null, -1);
-                    } else if (searchStrategy.equals("iddfs")) {
+                    } else if (searchStrategy.equalsIgnoreCase ("iddfs")) {
                         int d;
                         if (depth == null) {
                             System.out.println("No given max depth, using default 1000");
@@ -79,20 +79,20 @@ public class Main {
                             h = new GlobalMinManhattan(board.getFinishCoordinates());
                         }
                         else{
-                            if(heuristic.equals("h1")){
+                            if(heuristic.equalsIgnoreCase ("h1")){
                                 heuristic = "GlobalMinManhattan";
                                 h = new GlobalMinEuclidean(board.getFinishCoordinates());
-                            } else if(heuristic.equals("h2")){
+                            } else if(heuristic.equalsIgnoreCase ("h2")){
                                 heuristic = "GlobalMinEuclidean";
                                 h = new GlobalMinEuclidean(board.getFinishCoordinates());
-                            } else if(heuristic.equals("h3")){
+                            } else if(heuristic.equalsIgnoreCase ("h3")){
                                 heuristic = "";
                                 //FALTA LA HEURISTICA 3
                                 h = new GlobalMinEuclidean(board.getFinishCoordinates());
-                            } else if(heuristic.equals("h4")){
+                            } else if(heuristic.equalsIgnoreCase ("h4")){
                                 heuristic = "Manhattan";
                                 h = new Manhattan(board.getFinishCoordinates());
-                            } else if(heuristic.equals("h5")){
+                            } else if(heuristic.equalsIgnoreCase ("h5")){
                                 heuristic = "Euclidean";
                                 h = new Euclidean(board.getFinishCoordinates());
                             }
@@ -101,11 +101,11 @@ public class Main {
                             }
                         }
                         if(h != null) {
-                            if (searchStrategy.equals("greedy")) {
+                            if (searchStrategy.equalsIgnoreCase ("greedy")) {
                                 callStrategy(new Greedy(board, h), searchStrategy, heuristic, -1);
-                            } else if (searchStrategy.equals("astar")) {
+                            } else if (searchStrategy.equalsIgnoreCase ("astar")) {
                                 callStrategy(new AStar(board, h), searchStrategy, heuristic, -1);
-                            } else if (searchStrategy.equals("idastar")) {
+                            } else if (searchStrategy.equalsIgnoreCase ("idastar")) {
                                 //callStrategy(new IDAStar(board, h), searchStrategy, heuristic, -1);
                                 System.out.println("Implementar IDAStar");
                             } else {
