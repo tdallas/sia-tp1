@@ -2,10 +2,11 @@ import game.Board;
 import game.BoardFactory;
 import strategies.SearchStrategy;
 import strategies.heuristics.Heuristic;
+import strategies.heuristics.almostNonTrivial.Euclidean;
+import strategies.heuristics.almostNonTrivial.Manhattan;
 import strategies.heuristics.nonTrivials.GlobalMinEuclidean;
 import strategies.heuristics.nonTrivials.GlobalMinManhattan;
-import strategies.heuristics.trivials.Euclidean;
-import strategies.heuristics.trivials.Manhattan;
+import strategies.heuristics.nonTrivials.ManhattanCheckingHalf;
 import strategies.informed.AStar;
 import strategies.informed.Greedy;
 import strategies.informed.IDAStar;
@@ -14,8 +15,7 @@ import strategies.nonInformed.DFS;
 import strategies.nonInformed.IDDFS;
 import strategies.utils.Path;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 
 public class Main {
 
@@ -86,9 +86,8 @@ public class Main {
                                 heuristic = "GlobalMinEuclidean";
                                 h = new GlobalMinEuclidean(board.getFinishCoordinates());
                             } else if(heuristic.equalsIgnoreCase ("h3")){
-                                heuristic = "";
-                                //FALTA LA HEURISTICA 3
-                                h = new GlobalMinEuclidean(board.getFinishCoordinates());
+                                heuristic = "ManhattanCheckingHalf";
+                                h = new ManhattanCheckingHalf(board.getFinishCoordinates());
                             } else if(heuristic.equalsIgnoreCase ("h4")){
                                 heuristic = "Manhattan";
                                 h = new Manhattan(board.getFinishCoordinates());
@@ -118,7 +117,9 @@ public class Main {
                     System.out.println("Invalid given search strategy on config.txt");
                 }
             }
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            System.out.println("Error while reading config file.");
+        } catch (IOException e) {
             System.out.println("Error while reading config file.");
         }
     }
