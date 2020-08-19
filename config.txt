@@ -1,4 +1,4 @@
--s idastar
+-s iddfs
 -h h1
 -d 1000
--i m1.txt
+-i maps/m4.txt

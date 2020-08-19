@@ -6,9 +6,11 @@ import java.util.*;
 
 @Getter
 public class Path {
+    private Node node;
     private final List<Step> steps;
 
     public Path(Node node){
+        this.node = node;
         this.steps = new LinkedList<>();
         while(node != null){
             if(node.getStep() != null) {

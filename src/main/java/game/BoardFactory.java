@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class BoardFactory {
 
-    public static enum Level {TEST, EASY, MEDIUM, HARD1, HARD2, HARD3}
+    public enum Level {TEST, EASY, MEDIUM, HARD1, HARD2, HARD3}
 
     @AllArgsConstructor
     private static class BoardGame {
@@ -17,6 +17,18 @@ public class BoardFactory {
         private final Set<Coordinate> rockTiles;
         private final Set<Coordinate> emptyTiles;
         private final State state;
+    }
+
+    public static Board createBoardFromInputFile(String inputFile) {
+        BoardGame boardGame = generateLevel(inputFile);
+        if(boardGame != null){
+            return new Board(boardGame.finishTiles,
+                    boardGame.rockTiles,
+                    boardGame.emptyTiles,
+                    boardGame.state
+            );
+        }
+        return null;
     }
 
     public static Board createBoard(final Level level) {
@@ -61,7 +73,6 @@ public class BoardFactory {
             String line = null;
             while((line = reader.readLine()) != null) {
                 line = line + "\n";
-                System.out.print(line);
                 colCount = 0;
                 for(int i = 0; i < line.length(); i++) {
                     char item = line.charAt(i);

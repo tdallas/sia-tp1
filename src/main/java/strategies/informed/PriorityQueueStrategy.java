@@ -33,10 +33,7 @@ public abstract class PriorityQueueStrategy extends SearchStrategy {
                     simulateMovesAndAddToQueue(currentNode);
                 } else {
                     setFinishTime(System.currentTimeMillis());
-                    System.out.println("Time spent solving=" + getSolveTime());
-                    Path result = new Path(currentNode);
-                    System.out.println(result);
-                    return result;
+                    return new Path(currentNode);
                 }
             }
             visited.add(currentNode.getState());
@@ -47,10 +44,13 @@ public abstract class PriorityQueueStrategy extends SearchStrategy {
 
     private void simulateMovesAndAddToQueue(final Node currentNode) {
         final List<Direction> directionsToMovePusher = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
+        expandedNodes++;
         for (Direction direction : directionsToMovePusher) {
             Node newNode = Node.generateNewNode(direction, currentNode);
             if(!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
                 priorityQueue.add(newNode);
+            }else{
+                borderNodes++;
             }
         }
     }
