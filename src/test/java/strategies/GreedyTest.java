@@ -1,6 +1,7 @@
 package strategies;
 
 import game.Board;
+import game.BoardFactory;
 import org.junit.Test;
 import strategies.heuristics.trivials.Euclidean;
 import strategies.heuristics.trivials.Manhattan;
@@ -30,16 +31,16 @@ public class GreedyTest {
     }
 
     @Test
-    public void hardSolutionWithManhattan() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionWithManhattan() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         Greedy greedy = new Greedy(board, new Manhattan(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = greedy.findSolution();
         assertNotNull(finalPath);
     }
 
     @Test
-    public void hardSolutionWithEuclidean() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionWithEuclidean() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         Greedy greedy = new Greedy(board, new Euclidean(new HashSet<>(board.getFinishCoordinates())));
         Path finalPath = greedy.findSolution();
         assertNotNull(finalPath);

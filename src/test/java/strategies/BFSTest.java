@@ -1,6 +1,7 @@
 package strategies;
 
 import game.Board;
+import game.BoardFactory;
 import org.junit.Test;
 import strategies.nonInformed.BFS;
 import strategies.utils.Path;
@@ -46,8 +47,8 @@ public class BFSTest {
     }
 
     @Test
-    public void hardSolutionShouldBe86() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionShouldBe86() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         BFS bfs = new BFS(board);
         Path finalPath = bfs.findSolution();
         assertNotNull(finalPath);
