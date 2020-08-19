@@ -4,8 +4,9 @@ import game.Board;
 import org.junit.Test;
 import strategies.heuristics.nonTrivials.GlobalMinEuclidean;
 import strategies.heuristics.nonTrivials.GlobalMinManhattan;
-import strategies.heuristics.trivials.Euclidean;
-import strategies.heuristics.trivials.Manhattan;
+import strategies.heuristics.nonTrivials.ManhattanCheckingHalf;
+import strategies.heuristics.almostNonTrivial.Euclidean;
+import strategies.heuristics.almostNonTrivial.Manhattan;
 import strategies.informed.AStar;
 import strategies.utils.Path;
 
@@ -14,6 +15,7 @@ import java.util.HashSet;
 import static org.junit.Assert.assertNotNull;
 
 public class AStarTest {
+    
     @Test
     public void mediumSolutionWithManhattan() {
         Board board = BoardFactory.createBoard(BoardFactory.Level.MEDIUM);
@@ -102,4 +104,20 @@ public class AStarTest {
         assertNotNull(finalPath);
     }
 
+
+    @Test
+    public void hard2SolutionWithManhattanCheckingHalf() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD2);
+        AStar aStar = new AStar(board, new ManhattanCheckingHalf(board.getFinishCoordinates()));
+        Path finalPath = aStar.findSolution();
+        assertNotNull(finalPath);
+    }
+
+    @Test
+    public void hardSolutionWithManhattanCheckingHalf() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+        AStar aStar = new AStar(board, new ManhattanCheckingHalf(board.getFinishCoordinates()));
+        Path finalPath = aStar.findSolution();
+        assertNotNull(finalPath);
+    }
 }

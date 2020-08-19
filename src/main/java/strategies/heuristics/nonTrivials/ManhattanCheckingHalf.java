@@ -1,4 +1,4 @@
-package strategies.heuristics.trivials;
+package strategies.heuristics.nonTrivials;
 
 import game.Coordinate;
 import game.State;
@@ -6,9 +6,9 @@ import strategies.heuristics.Heuristic;
 
 import java.util.Set;
 
-public class Euclidean extends Heuristic {
+public class ManhattanCheckingHalf extends Heuristic {
 
-    public Euclidean(final Set<Coordinate> finishTiles) {
+    public ManhattanCheckingHalf(final Set<Coordinate> finishTiles) {
         super(finishTiles);
     }
 
@@ -17,8 +17,15 @@ public class Euclidean extends Heuristic {
 
         double sumValue = calculateMinDistance(currentState.getPusher(), currentState.getBoxes());
 
+        int limit = currentState.getBoxes().size() / 2;
+        int currentIteration = 0;
+
         for (Coordinate boxCoordinate : currentState.getBoxes()) {
+            currentIteration++;
             sumValue += calculateMinDistance(boxCoordinate, getFinishTiles());
+            if (currentIteration >= limit) {
+                return sumValue;
+            }
         }
 
         return sumValue;
@@ -28,17 +35,25 @@ public class Euclidean extends Heuristic {
     protected double calculateMinDistance(Coordinate current, Set<Coordinate> coordinateSet) {
         double minDistance = Double.MAX_VALUE, currentDistance;
 
+        int limit = coordinateSet.size() / 2;
+        int currentIteration = 0;
+
         for (Coordinate coordinate : coordinateSet) {
-            currentDistance = euclideanDistance(current, coordinate);
+            currentIteration++;
+            currentDistance = manhattanDistance(current, coordinate);
             if (currentDistance < minDistance) {
                 minDistance = currentDistance;
             }
+            if (currentIteration >= limit) {
+                return minDistance;
+            }
+
         }
 
         return minDistance;
     }
 
-    private double euclideanDistance(final Coordinate from, final Coordinate to) {
-        return Math.hypot(from.getX() - to.getX(), from.getY() - to.getY());
+    private double manhattanDistance(final Coordinate from, final Coordinate to) {
+        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
     }
 }

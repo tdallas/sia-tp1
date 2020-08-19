@@ -2,8 +2,8 @@ package strategies;
 
 import game.Board;
 import org.junit.Test;
-import strategies.heuristics.trivials.Euclidean;
-import strategies.heuristics.trivials.Manhattan;
+import strategies.heuristics.almostNonTrivial.Euclidean;
+import strategies.heuristics.almostNonTrivial.Manhattan;
 import strategies.informed.Greedy;
 import strategies.utils.Path;
 
