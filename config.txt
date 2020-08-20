@@ -1,4 +1,4 @@
--s iddfs
+-s astar
 -h h1
--d 1000
--i maps/m4.txt
+-d 25
+-i maps/m10.txt
