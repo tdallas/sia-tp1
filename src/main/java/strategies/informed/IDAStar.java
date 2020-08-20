@@ -40,6 +40,7 @@ public class IDAStar extends SearchStrategy {
             limits.add(currentMinValue);
             currentMinValue = Double.MAX_VALUE;
             if (endNode != null && getBoard().gameHasEnded(endNode.getState())) {
+                setFinishTime(System.currentTimeMillis());
                 return new Path(endNode);
             }
         }
@@ -71,14 +72,15 @@ public class IDAStar extends SearchStrategy {
                 (int) ((firstNode.getCost() + heuristic.evaluate(firstNode.getState())) -
                         (secondNode.getCost()) + heuristic.evaluate(secondNode.getState())));
         for (Direction direction : directionsToMovePusher) {
+            expandedNodes++;
             Node newNode = Node.generateNewNode(direction, currentNode);
             currentPQ.add(newNode);
         }
 
         while (!currentPQ.isEmpty()) {
             Node leastWeightNode = currentPQ.poll();
-            if (leastWeightNode != null && !visited.contains(leastWeightNode.getState())) {
-                if (!getBoard().isDeadlock(leastWeightNode.getState())) {
+            if (leastWeightNode != null) {
+                if (!visited.contains(leastWeightNode.getState()) && !getBoard().isDeadlock(leastWeightNode.getState())) {
                     stack.push(leastWeightNode);
                     double possibleNewBound = heuristic.evaluate(leastWeightNode.getState()) + leastWeightNode.getCost();
                     if (!limits.contains(possibleNewBound) && possibleNewBound < currentMinValue) {
@@ -88,19 +90,12 @@ public class IDAStar extends SearchStrategy {
                     if (possibleEndNode != null && getBoard().gameHasEnded(possibleEndNode.getState())) {
                         return possibleEndNode;
                     }
+                } else {
+                    borderNodes++;
                 }
             }
         }
 
         return null;
-    }
-
-    private void simulateMovesAndAddToQueue(final Node currentNode) {
-        final List<Direction> directionsToMovePusher = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
-        for (Direction direction : directionsToMovePusher) {
-            Node newNode = Node.generateNewNode(direction, currentNode);
-            if (!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
-            }
-        }
     }
 }
