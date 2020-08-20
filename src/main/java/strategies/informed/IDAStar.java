@@ -12,90 +12,56 @@ import java.util.*;
 
 public class IDAStar extends SearchStrategy {
 
-    // initialize to default heuristic
-    private Stack<Node> stack;
-    private Set<State> visited;
     private final Heuristic heuristic;
-    private List<Double> limits = new ArrayList<>();
-    private Double currentMinValue = Double.MAX_VALUE;
+
 
     public IDAStar(final Board board, final Heuristic heuristic) {
         super(board);
-        this.stack = new Stack<>();
-        this.visited = new HashSet<>();
         this.heuristic = heuristic;
     }
 
     @Override
-    public Path findSolution() {
+    public Path findSolution(){
         setStartTime(System.currentTimeMillis());
         Node initialNode = new Node(null, getBoard().getInitialState(), null, 0);
-        double initialLimit = heuristic.evaluate(initialNode.getState());
-        limits.add(initialLimit);
+        double cutoff = heuristic.evaluate(initialNode.getState());
         while (true) {
-            stack = new Stack<>();
-            stack.push(initialNode);
-            Node endNode = findRecursiveSolution(stack, 0, limits.get(limits.size() - 1));
-            visited = new HashSet<>();
-            limits.add(currentMinValue);
-            currentMinValue = Double.MAX_VALUE;
-            if (endNode != null && getBoard().gameHasEnded(endNode.getState())) {
-                setFinishTime(System.currentTimeMillis());
-                return new Path(endNode);
-            }
-        }
-    }
 
-    private Node findRecursiveSolution(Stack<Node> stack, double nodeCost, double bound) {
-        if (stack.isEmpty()) {
-            return null;
-        }
-        Node currentNode = stack.pop();
-        visited.add(currentNode.getState());
-        double currentFValue = currentNode.getCost() + heuristic.evaluate(currentNode.getState());
+            Set<State> visited = new HashSet<>();
+            PriorityQueue<Node> priorityQueue = new PriorityQueue<>((firstNode, secondNode) ->
+                    (int) ((firstNode.getCost() + heuristic.evaluate(firstNode.getState())) -
+                            (secondNode.getCost()) + heuristic.evaluate(secondNode.getState())));
+            double nextCutoff = Double.MAX_VALUE;
 
-        if (currentFValue < currentMinValue) {
-            if (!limits.contains(currentFValue)) {
-                currentMinValue = currentFValue;
-            }
-        }
+            priorityQueue.add(initialNode);
+            while (!priorityQueue.isEmpty()) {
+                Node current = priorityQueue.poll();
+                visited.add(current.getState());
+                expandedNodes++;
 
-        if (currentFValue > bound) {
-            return null;
-        }
-        if (getBoard().gameHasEnded(currentNode.getState())) {
-            return currentNode;
-        }
-        final List<Direction> directionsToMovePusher = getBoard().getPusherPossibleDirectionsToMove(currentNode.getState());
+                if (getBoard().gameHasEnded(current.getState())) {
+                    setFinishTime(System.currentTimeMillis());
+                    return new Path(current);
+                }
 
-        PriorityQueue<Node> currentPQ = new PriorityQueue<>((firstNode, secondNode) ->
-                (int) ((firstNode.getCost() + heuristic.evaluate(firstNode.getState())) -
-                        (secondNode.getCost()) + heuristic.evaluate(secondNode.getState())));
-        for (Direction direction : directionsToMovePusher) {
-            expandedNodes++;
-            Node newNode = Node.generateNewNode(direction, currentNode);
-            currentPQ.add(newNode);
-        }
-
-        while (!currentPQ.isEmpty()) {
-            Node leastWeightNode = currentPQ.poll();
-            if (leastWeightNode != null) {
-                if (!visited.contains(leastWeightNode.getState()) && !getBoard().isDeadlock(leastWeightNode.getState())) {
-                    stack.push(leastWeightNode);
-                    double possibleNewBound = heuristic.evaluate(leastWeightNode.getState()) + leastWeightNode.getCost();
-                    if (!limits.contains(possibleNewBound) && possibleNewBound < currentMinValue) {
-                        currentMinValue = possibleNewBound;
+                List<Direction> directions = getBoard().getPusherPossibleDirectionsToMove(current.getState());
+                for (Direction direction : directions) {
+                    Node newNode = Node.generateNewNode(direction, current);
+                    if (!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
+                        double fValue = heuristic.evaluate(newNode.getState());
+                        if(fValue <= cutoff){
+                            priorityQueue.add(newNode);
+                        }
+                        if (fValue < nextCutoff) {
+                            nextCutoff = fValue;
+                        }
                     }
-                    Node possibleEndNode = findRecursiveSolution(stack, nodeCost + 1, bound);
-                    if (possibleEndNode != null && getBoard().gameHasEnded(possibleEndNode.getState())) {
-                        return possibleEndNode;
+                    else{
+                        borderNodes++;
                     }
-                } else {
-                    borderNodes++;
                 }
             }
+            cutoff = nextCutoff;
         }
-
-        return null;
     }
 }

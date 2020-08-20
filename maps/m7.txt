@@ -1,8 +1,9 @@
-XXXXXXXXXXXX
-X@         X
-X      X * X
-X  XXXXX X X
-X      * X X
-X *XXXXXXX.X
-X        ..X
-XXXXXXXXXXXX
+    XXXXX
+    X   X
+    X*  XXX
+  XXX   * X
+  X       X
+XXXXX XX XXXXXX
+X            .X
+X *      @  ..X
+XXXXXXXXXXXXXXX

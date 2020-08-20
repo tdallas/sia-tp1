@@ -154,7 +154,7 @@ public class Board {
                         !rightRight.isWalkable() &&
                         !left.isFinalTile() &&
                         !right.isFinalTile()) {
-                    return true;  //top & sides
+                    return true;
                 }
                 if (!downLeft.isWalkable() &&
                         !down.isWalkable() &&
@@ -163,7 +163,7 @@ public class Board {
                         !rightRight.isWalkable() &&
                         !left.isFinalTile() &&
                         !right.isFinalTile()) {
-                    return true; //bottom & sides
+                    return true;
                 }
                 if (!upLeft.isWalkable() &&
                         !left.isWalkable() &&
@@ -172,7 +172,7 @@ public class Board {
                         !downDown.isWalkable() &&
                         !up.isFinalTile() &&
                         !down.isFinalTile()) {
-                    return true; //left & vertical
+                    return true;
                 }
                 if (!upRight.isWalkable() &&
                         !right.isWalkable() &&
@@ -181,7 +181,7 @@ public class Board {
                         !downDown.isWalkable() &&
                         !up.isFinalTile() &&
                         !down.isFinalTile()) {
-                    return true; //right & top/bottom
+                    return true;
                 }
             }
         }
