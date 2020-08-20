@@ -13,7 +13,7 @@ import java.util.*;
 public class IDAStar extends SearchStrategy {
 
     // initialize to default heuristic
-    private final Stack<Node> stack;
+    private Stack<Node> stack;
     private Set<State> visited;
     private final Heuristic heuristic;
     private List<Double> limits = new ArrayList<>();
@@ -33,6 +33,7 @@ public class IDAStar extends SearchStrategy {
         double initialLimit = heuristic.evaluate(initialNode.getState());
         limits.add(initialLimit);
         while (true) {
+            stack = new Stack<>();
             stack.push(initialNode);
             Node endNode = findRecursiveSolution(stack, 0, limits.get(limits.size() - 1));
             visited = new HashSet<>();

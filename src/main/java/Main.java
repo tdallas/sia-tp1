@@ -105,8 +105,7 @@ public class Main {
                             } else if (searchStrategy.equalsIgnoreCase ("astar")) {
                                 callStrategy(new AStar(board, h), searchStrategy, heuristic, -1);
                             } else if (searchStrategy.equalsIgnoreCase ("idastar")) {
-                                //callStrategy(new IDAStar(board, h), searchStrategy, heuristic, -1);
-                                System.out.println("Implementar IDAStar");
+                                callStrategy(new IDAStar(board, h), searchStrategy, heuristic, -1);
                             } else {
                                 System.out.println("Invalid given search strategy on config.txt");
                             }

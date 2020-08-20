@@ -1,4 +1,4 @@
--s astar
--h h1
--d 25
+-s idastar
+-h h4
+-d 1000
 -i maps/m10.txt
