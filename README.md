@@ -23,16 +23,15 @@ Modify `config.txt` file to run the desire environment and execute .jar:
 `java -jar target/sia-tp1-1.0.0.jar`
 
 ## Example
-In config.txt:
+In config.txt put:
 
-`
--s bfs
+-s bfs  
 -i maps/m4.txt
-`
 
-Or in config.txt:
+______________
 
-`
--s greedy
--h h1
--i maps/m4.txt`
+Or in config.txt put:
+
+-s greedy  
+-h h1  
+-i maps/m4.txt
