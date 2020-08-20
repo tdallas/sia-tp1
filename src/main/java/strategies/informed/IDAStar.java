@@ -47,18 +47,18 @@ public class IDAStar extends SearchStrategy {
                 List<Direction> directions = getBoard().getPusherPossibleDirectionsToMove(current.getState());
                 for (Direction direction : directions) {
                     Node newNode = Node.generateNewNode(direction, current);
-                    if (!visited.contains(newNode.getState()) && !getBoard().isDeadlock(newNode.getState())) {
-                        double fValue = heuristic.evaluate(newNode.getState());
-                        if(fValue <= cutoff){
-                            priorityQueue.add(newNode);
-                        }
+                    if (visited.contains(newNode.getState()) || getBoard().isDeadlock(newNode.getState())) {
+                        borderNodes++;
+                        continue;
+                    }
+                    double fValue = heuristic.evaluate(newNode.getState());
+                    if (fValue > cutoff) {
                         if (fValue < nextCutoff) {
                             nextCutoff = fValue;
                         }
+                        continue;
                     }
-                    else{
-                        borderNodes++;
-                    }
+                    priorityQueue.add(newNode);
                 }
             }
             cutoff = nextCutoff;
