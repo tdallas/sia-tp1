@@ -115,8 +115,8 @@ public class AStarTest {
     }
 
     @Test
-    public void hardSolutionWithManhattanCheckingHalf() {
-        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD);
+    public void hard1SolutionWithManhattanCheckingHalf() {
+        Board board = BoardFactory.createBoard(BoardFactory.Level.HARD1);
         AStar aStar = new AStar(board, new ManhattanCheckingHalf(board.getFinishCoordinates()));
         Path finalPath = aStar.findSolution();
         assertNotNull(finalPath);

@@ -1,8 +1,8 @@
-  XXXX
-  X@ X
-XXX**XX
-X    .X
-X   * X
-XX. XXX
- X. X
  XXXX
+ X. X
+XX. XXX
+X   * X
+X    .X
+XXX**XX
+  X@ X
+  XXXX
